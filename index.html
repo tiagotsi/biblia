@@ -58,6 +58,31 @@
     }
     .link:hover { text-decoration: underline; }
   </style>
+<style>
+  /* --- Progresso de leitura (localStorage por usuário/navegador) --- */
+  .day.lido {
+    background: #e8f5e9 !important;
+    border-color: #43a047 !important;
+  }
+  .day .status-btn {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #43a047;
+    background: #ffffff;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+  .day.lido .status-btn {
+    background: #43a047;
+    color: white;
+  }
+  .day .status-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  }
+
+</style>
 </head>
 <body>
   <h1>Plano de Leitura Bíblica Anual</h1>
@@ -384,7 +409,7 @@
 <div class="day" data-dia="6"><strong>Dia 6</strong><br>Jo 2–4<br><a class="link" href="https://www.bibliaonline.com.br/nvt/jo/2" target="_blank">Abrir Jo 2</a></div>
 <div class="day" data-dia="7"><strong>Dia 7</strong><br>Mc 2<br><a class="link" href="https://www.bibliaonline.com.br/nvt/mc/2" target="_blank">Abrir Mc 2</a></div>
 <div class="day" data-dia="8"><strong>Dia 8</strong><br>Mc 3<br><a class="link" href="https://www.bibliaonline.com.br/nvt/mc/3" target="_blank">Abrir Mc 3</a></div>
-<div class="day" data-dia="9"><strong>Dia 9</strong><br>Mt 12:1–21, Mc 3, Lc 6<br><a class="link" href="https://www.bibliaonline.com.br/nvt/mt/12" target="_blank">Abrir Mt 12</a> <a class="link" href="https://www.bibliaonline.com.br/nvt/mc/3" target="_blank">Abrir Mc 3</a> <a class="link" href="https://www.bibliaonline.com.br/nvt/lc/6" target="_blank">Abrir Lc 6</a></div>
+<div class="day" data-dia="9"><strong>Dia 9</strong><br>Mt 12:1–21, Jo 5, Lc 6<br><a class="link" href="https://www.bibliaonline.com.br/nvt/mt/12" target="_blank">Abrir Mt 12</a> <a class="link" href="https://www.bibliaonline.com.br/nvt/jo/5" target="_blank">Abrir Jo 5</a> <a class="link" href="https://www.bibliaonline.com.br/nvt/lc/6" target="_blank">Abrir Lc 6</a></div>
 <div class="day" data-dia="10"><strong>Dia 10</strong><br>Mt 5–7<br><a class="link" href="https://www.bibliaonline.com.br/nvt/mt/5" target="_blank">Abrir Mt 5</a></div>
 <div class="day" data-dia="11"><strong>Dia 11</strong><br>Mt 8:1–13, Lc 7<br><a class="link" href="https://www.bibliaonline.com.br/nvt/mt/8" target="_blank">Abrir Mt 8</a> <a class="link" href="https://www.bibliaonline.com.br/nvt/lc/7" target="_blank">Abrir Lc 7</a></div>
 <div class="day" data-dia="12"><strong>Dia 12</strong><br>Mt 11<br><a class="link" href="https://www.bibliaonline.com.br/nvt/mt/11" target="_blank">Abrir Mt 11</a></div>
@@ -501,6 +526,59 @@
     });
   });
 </script>
+
+  <!-- Progresso individual com localStorage -->
+  <script>
+  (function(){
+    const STORAGE_PREFIX = 'planoBiblico_v1:';
+
+    function getMonthId(dayEl){
+      const m = dayEl.closest('.mes');
+      return m ? m.id : 'sem-mes';
+    }
+    function keyFor(dayEl){
+      const dia = dayEl.getAttribute('data-dia') || '?';
+      return STORAGE_PREFIX + getMonthId(dayEl) + ':' + dia;
+    }
+    function isRead(dayEl){
+      return localStorage.getItem(keyFor(dayEl)) === '1';
+    }
+    function setRead(dayEl, val){
+      if(val) localStorage.setItem(keyFor(dayEl), '1');
+      else localStorage.removeItem(keyFor(dayEl));
+    }
+    function syncState(dayEl, btn){
+      const read = isRead(dayEl);
+      dayEl.classList.toggle('lido', read);
+      if(btn){
+        btn.textContent = read ? '✅ Lido (desfazer)' : 'Marcar como lido';
+        btn.setAttribute('aria-pressed', read ? 'true' : 'false');
+      }
+    }
+    function attachButton(dayEl){
+      const btn = document.createElement('button');
+      btn.className = 'status-btn';
+      btn.type = 'button';
+      btn.addEventListener('click', function(){
+        const newVal = !isRead(dayEl);
+        setRead(dayEl, newVal);
+        syncState(dayEl, btn);
+      });
+      syncState(dayEl, btn);
+      dayEl.appendChild(btn);
+    }
+    function init(){
+      const days = document.querySelectorAll('.mes .day[data-dia]');
+      days.forEach(attachButton);
+    }
+    if(document.readyState === 'loading'){
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+  </script>
+
 </body>
 </html>
   <meta charset="UTF-8">
@@ -551,6 +629,31 @@
     }
     .link:hover { text-decoration: underline; }
   </style>
+<style>
+  /* --- Progresso de leitura (localStorage por usuário/navegador) --- */
+  .day.lido {
+    background: #e8f5e9 !important;
+    border-color: #43a047 !important;
+  }
+  .day .status-btn {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #43a047;
+    background: #ffffff;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+  .day.lido .status-btn {
+    background: #43a047;
+    color: white;
+  }
+  .day .status-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  }
+
+</style>
 </head>
 <body>
   <h1>Plano de Leitura Bíblica Anual</h1>
@@ -979,6 +1082,59 @@
     }
     mostrarMes("Janeiro");
   </script>
+
+  <!-- Progresso individual com localStorage -->
+  <script>
+  (function(){
+    const STORAGE_PREFIX = 'planoBiblico_v1:';
+
+    function getMonthId(dayEl){
+      const m = dayEl.closest('.mes');
+      return m ? m.id : 'sem-mes';
+    }
+    function keyFor(dayEl){
+      const dia = dayEl.getAttribute('data-dia') || '?';
+      return STORAGE_PREFIX + getMonthId(dayEl) + ':' + dia;
+    }
+    function isRead(dayEl){
+      return localStorage.getItem(keyFor(dayEl)) === '1';
+    }
+    function setRead(dayEl, val){
+      if(val) localStorage.setItem(keyFor(dayEl), '1');
+      else localStorage.removeItem(keyFor(dayEl));
+    }
+    function syncState(dayEl, btn){
+      const read = isRead(dayEl);
+      dayEl.classList.toggle('lido', read);
+      if(btn){
+        btn.textContent = read ? '✅ Lido (desfazer)' : 'Marcar como lido';
+        btn.setAttribute('aria-pressed', read ? 'true' : 'false');
+      }
+    }
+    function attachButton(dayEl){
+      const btn = document.createElement('button');
+      btn.className = 'status-btn';
+      btn.type = 'button';
+      btn.addEventListener('click', function(){
+        const newVal = !isRead(dayEl);
+        setRead(dayEl, newVal);
+        syncState(dayEl, btn);
+      });
+      syncState(dayEl, btn);
+      dayEl.appendChild(btn);
+    }
+    function init(){
+      const days = document.querySelectorAll('.mes .day[data-dia]');
+      days.forEach(attachButton);
+    }
+    if(document.readyState === 'loading'){
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+  </script>
+
 </body>
 </html>
 
@@ -1032,6 +1188,31 @@
     }
     .link:hover { text-decoration: underline; }
   </style>
+<style>
+  /* --- Progresso de leitura (localStorage por usuário/navegador) --- */
+  .day.lido {
+    background: #e8f5e9 !important;
+    border-color: #43a047 !important;
+  }
+  .day .status-btn {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #43a047;
+    background: #ffffff;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+  .day.lido .status-btn {
+    background: #43a047;
+    color: white;
+  }
+  .day .status-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  }
+
+</style>
 </head>
 <body>
   <h1>Plano de Leitura Bíblica Anual</h1>
