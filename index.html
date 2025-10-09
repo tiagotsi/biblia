@@ -59,28 +59,28 @@
     .link:hover { text-decoration: underline; }
   </style>
 <style>
-  /* --- Progresso de leitura (localStorage por usuário/navegador) --- */
-  .day.lido {
-    background: #e8f5e9 !important;
-    border-color: #43a047 !important;
-  }
-  .day .status-btn {
-    margin-top: 10px;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #43a047;
-    background: #ffffff;
+  /* --- Toggle pequeno ao lado de cada link de leitura --- */
+  .link-wrap { display: inline-flex; align-items: center; gap: 8px; }
+  .link-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #43a047;
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    user-select: none;
+    line-height: 1;
+    font-size: 12px;
+    background: #fff;
+    vertical-align: middle;
   }
-  .day.lido .status-btn {
+  .link-status.checked {
     background: #43a047;
-    color: white;
+    color: #fff;
   }
-  .day .status-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-  }
+  .link-status:focus { outline: 2px dotted #43a047; outline-offset: 2px; }
 
 </style>
 </head>
@@ -527,54 +527,69 @@
   });
 </script>
 
-  <!-- Progresso individual com localStorage -->
+  <!-- Toggle por link com localStorage -->
   <script>
   (function(){
-    const STORAGE_PREFIX = 'planoBiblico_v1:';
+    const STORAGE_PREFIX_LINK = 'planoBiblico_v1:link:';
 
-    function getMonthId(dayEl){
-      const m = dayEl.closest('.mes');
+    function getMonthIdFrom(el){
+      const m = el.closest('.mes');
       return m ? m.id : 'sem-mes';
     }
-    function keyFor(dayEl){
-      const dia = dayEl.getAttribute('data-dia') || '?';
-      return STORAGE_PREFIX + getMonthId(dayEl) + ':' + dia;
+    function keyForLink(aEl){
+      const dayEl = aEl.closest('.day');
+      const dia = dayEl ? (dayEl.getAttribute('data-dia') || '?') : '?';
+      const mes = getMonthIdFrom(aEl);
+      const href = aEl.getAttribute('href') || aEl.textContent.trim();
+      return STORAGE_PREFIX_LINK + mes + ':' + dia + ':' + href;
     }
-    function isRead(dayEl){
-      return localStorage.getItem(keyFor(dayEl)) === '1';
+    function isLinkRead(aEl){
+      return localStorage.getItem(keyForLink(aEl)) === '1';
     }
-    function setRead(dayEl, val){
-      if(val) localStorage.setItem(keyFor(dayEl), '1');
-      else localStorage.removeItem(keyFor(dayEl));
+    function setLinkRead(aEl, val){
+      const k = keyForLink(aEl);
+      if(val) localStorage.setItem(k, '1');
+      else localStorage.removeItem(k);
     }
-    function syncState(dayEl, btn){
-      const read = isRead(dayEl);
-      dayEl.classList.toggle('lido', read);
-      if(btn){
-        btn.textContent = read ? '✅ Lido (desfazer)' : 'Marcar como lido';
+    function buildToggleFor(aEl){
+      if(aEl.parentElement && aEl.parentElement.classList.contains('link-wrap')){
+        return;
+      }
+      const wrap = document.createElement('span');
+      wrap.className = 'link-wrap';
+      aEl.replaceWith(wrap);
+      wrap.appendChild(aEl);
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'link-status';
+      btn.title = 'Marcar como lido / desfazer';
+      btn.setAttribute('aria-label', 'Marcar como lido');
+      btn.setAttribute('aria-pressed', 'false');
+
+      function sync(){
+        const read = isLinkRead(aEl);
+        btn.classList.toggle('checked', read);
+        btn.textContent = read ? '✓' : '';
         btn.setAttribute('aria-pressed', read ? 'true' : 'false');
       }
-    }
-    function attachButton(dayEl){
-      const btn = document.createElement('button');
-      btn.className = 'status-btn';
-      btn.type = 'button';
       btn.addEventListener('click', function(){
-        const newVal = !isRead(dayEl);
-        setRead(dayEl, newVal);
-        syncState(dayEl, btn);
+        const newVal = !isLinkRead(aEl);
+        setLinkRead(aEl, newVal);
+        sync();
       });
-      syncState(dayEl, btn);
-      dayEl.appendChild(btn);
+      sync();
+      wrap.appendChild(btn);
     }
-    function init(){
-      const days = document.querySelectorAll('.mes .day[data-dia]');
-      days.forEach(attachButton);
+
+    function initPerLinkToggles(){
+      document.querySelectorAll('.mes .day a.link').forEach(buildToggleFor);
     }
+
     if(document.readyState === 'loading'){
-      document.addEventListener('DOMContentLoaded', init);
+      document.addEventListener('DOMContentLoaded', initPerLinkToggles);
     } else {
-      init();
+      initPerLinkToggles();
     }
   })();
   </script>
@@ -630,28 +645,28 @@
     .link:hover { text-decoration: underline; }
   </style>
 <style>
-  /* --- Progresso de leitura (localStorage por usuário/navegador) --- */
-  .day.lido {
-    background: #e8f5e9 !important;
-    border-color: #43a047 !important;
-  }
-  .day .status-btn {
-    margin-top: 10px;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #43a047;
-    background: #ffffff;
+  /* --- Toggle pequeno ao lado de cada link de leitura --- */
+  .link-wrap { display: inline-flex; align-items: center; gap: 8px; }
+  .link-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #43a047;
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    user-select: none;
+    line-height: 1;
+    font-size: 12px;
+    background: #fff;
+    vertical-align: middle;
   }
-  .day.lido .status-btn {
+  .link-status.checked {
     background: #43a047;
-    color: white;
+    color: #fff;
   }
-  .day .status-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-  }
+  .link-status:focus { outline: 2px dotted #43a047; outline-offset: 2px; }
 
 </style>
 </head>
@@ -1083,54 +1098,69 @@
     mostrarMes("Janeiro");
   </script>
 
-  <!-- Progresso individual com localStorage -->
+  <!-- Toggle por link com localStorage -->
   <script>
   (function(){
-    const STORAGE_PREFIX = 'planoBiblico_v1:';
+    const STORAGE_PREFIX_LINK = 'planoBiblico_v1:link:';
 
-    function getMonthId(dayEl){
-      const m = dayEl.closest('.mes');
+    function getMonthIdFrom(el){
+      const m = el.closest('.mes');
       return m ? m.id : 'sem-mes';
     }
-    function keyFor(dayEl){
-      const dia = dayEl.getAttribute('data-dia') || '?';
-      return STORAGE_PREFIX + getMonthId(dayEl) + ':' + dia;
+    function keyForLink(aEl){
+      const dayEl = aEl.closest('.day');
+      const dia = dayEl ? (dayEl.getAttribute('data-dia') || '?') : '?';
+      const mes = getMonthIdFrom(aEl);
+      const href = aEl.getAttribute('href') || aEl.textContent.trim();
+      return STORAGE_PREFIX_LINK + mes + ':' + dia + ':' + href;
     }
-    function isRead(dayEl){
-      return localStorage.getItem(keyFor(dayEl)) === '1';
+    function isLinkRead(aEl){
+      return localStorage.getItem(keyForLink(aEl)) === '1';
     }
-    function setRead(dayEl, val){
-      if(val) localStorage.setItem(keyFor(dayEl), '1');
-      else localStorage.removeItem(keyFor(dayEl));
+    function setLinkRead(aEl, val){
+      const k = keyForLink(aEl);
+      if(val) localStorage.setItem(k, '1');
+      else localStorage.removeItem(k);
     }
-    function syncState(dayEl, btn){
-      const read = isRead(dayEl);
-      dayEl.classList.toggle('lido', read);
-      if(btn){
-        btn.textContent = read ? '✅ Lido (desfazer)' : 'Marcar como lido';
+    function buildToggleFor(aEl){
+      if(aEl.parentElement && aEl.parentElement.classList.contains('link-wrap')){
+        return;
+      }
+      const wrap = document.createElement('span');
+      wrap.className = 'link-wrap';
+      aEl.replaceWith(wrap);
+      wrap.appendChild(aEl);
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'link-status';
+      btn.title = 'Marcar como lido / desfazer';
+      btn.setAttribute('aria-label', 'Marcar como lido');
+      btn.setAttribute('aria-pressed', 'false');
+
+      function sync(){
+        const read = isLinkRead(aEl);
+        btn.classList.toggle('checked', read);
+        btn.textContent = read ? '✓' : '';
         btn.setAttribute('aria-pressed', read ? 'true' : 'false');
       }
-    }
-    function attachButton(dayEl){
-      const btn = document.createElement('button');
-      btn.className = 'status-btn';
-      btn.type = 'button';
       btn.addEventListener('click', function(){
-        const newVal = !isRead(dayEl);
-        setRead(dayEl, newVal);
-        syncState(dayEl, btn);
+        const newVal = !isLinkRead(aEl);
+        setLinkRead(aEl, newVal);
+        sync();
       });
-      syncState(dayEl, btn);
-      dayEl.appendChild(btn);
+      sync();
+      wrap.appendChild(btn);
     }
-    function init(){
-      const days = document.querySelectorAll('.mes .day[data-dia]');
-      days.forEach(attachButton);
+
+    function initPerLinkToggles(){
+      document.querySelectorAll('.mes .day a.link').forEach(buildToggleFor);
     }
+
     if(document.readyState === 'loading'){
-      document.addEventListener('DOMContentLoaded', init);
+      document.addEventListener('DOMContentLoaded', initPerLinkToggles);
     } else {
-      init();
+      initPerLinkToggles();
     }
   })();
   </script>
@@ -1189,28 +1219,28 @@
     .link:hover { text-decoration: underline; }
   </style>
 <style>
-  /* --- Progresso de leitura (localStorage por usuário/navegador) --- */
-  .day.lido {
-    background: #e8f5e9 !important;
-    border-color: #43a047 !important;
-  }
-  .day .status-btn {
-    margin-top: 10px;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #43a047;
-    background: #ffffff;
+  /* --- Toggle pequeno ao lado de cada link de leitura --- */
+  .link-wrap { display: inline-flex; align-items: center; gap: 8px; }
+  .link-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #43a047;
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    user-select: none;
+    line-height: 1;
+    font-size: 12px;
+    background: #fff;
+    vertical-align: middle;
   }
-  .day.lido .status-btn {
+  .link-status.checked {
     background: #43a047;
-    color: white;
+    color: #fff;
   }
-  .day .status-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-  }
+  .link-status:focus { outline: 2px dotted #43a047; outline-offset: 2px; }
 
 </style>
 </head>
