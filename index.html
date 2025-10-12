@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* Estilos CSS (Os mesmos estilos foram mantidos para consistência visual) */
+    /* Estilos CSS */
     :root {
       --bg: #f7f7f8;
       --card: #ffffff;
@@ -180,7 +180,7 @@
   <div id="authToast"></div>
 
   <script>
-    // JSON do Plano de Leitura
+    // JSON do Plano de Leitura - COM CORREÇÕES DE COLISÃO DE CHAVES
     const READING_PLAN = {
       "Janeiro": [
         { day: 1, refs: [{ text: 'Gn 1-3', link: 'https://www.bibliaonline.com.br/nvt/gn/1' }] },
@@ -291,12 +291,19 @@
         { day: 10, refs: [{ text: '1Sm 9-12', link: 'https://www.bibliaonline.com.br/nvt/1sm/9' }] },
         { day: 11, refs: [{ text: '1Sm 13-14', link: 'https://www.bibliaonline.com.br/nvt/1sm/13' }] },
         { day: 12, refs: [{ text: '1Sm 15-17', link: 'https://www.bibliaonline.com.br/nvt/1sm/15' }] },
-        { day: 13, refs: [{ text: '1Sm 18-20', link: 'https://www.bibliaonline.com.br/nvt/1sm/18' }, { text: 'Sl 11', link: 'https://www.bibliaonline.com.br/nvt/sl/11' }, { text: 'Sl 59', link: 'https://www.bibliaonline.com.br/nvt/sl/59' }] },
+        { day: 13, refs: [
+            { text: '1Sm 18-20', link: 'https://www.bibliaonline.com.br/nvt/1sm/18/1' }, 
+            { text: 'Sl 11', link: 'https://www.bibliaonline.com.br/nvt/sl/11' }, 
+            { text: 'Sl 59', link: 'https://www.bibliaonline.com.br/nvt/sl/59' }
+        ] },
         { day: 14, refs: [{ text: 'Sl 7, 27, 31, 34, 52', link: 'https://www.bibliaonline.com.br/nvt/sl/7' }] },
         { day: 15, refs: [{ text: 'Sl 56, 120, 140-142', link: 'https://www.bibliaonline.com.br/nvt/sl/56' }] },
         { day: 16, refs: [{ text: '1Sm 25-27', link: 'https://www.bibliaonline.com.br/nvt/1sm/25' }] },
         { day: 17, refs: [{ text: 'Sl 17, 35, 54, 63', link: 'https://www.bibliaonline.com.br/nvt/sl/17' }] },
-        { day: 18, refs: [{ text: '1Sm 28-31', link: 'https://www.bibliaonline.com.br/nvt/1sm/28' }, { text: 'Sl 18', link: 'https://www.bibliaonline.com.br/nvt/sl/18' }] },
+        { day: 18, refs: [
+            { text: '1Sm 28-31', link: 'https://www.bibliaonline.com.br/nvt/1sm/28' }, 
+            { text: 'Sl 18', link: 'https://www.bibliaonline.com.br/nvt/sl/18' }
+        ] },
         { day: 19, refs: [{ text: 'Sl 121, 123-125, 128-130', link: 'https://www.bibliaonline.com.br/nvt/sl/121' }] },
         { day: 20, refs: [{ text: '2Sm 1-4', link: 'https://www.bibliaonline.com.br/nvt/2sm/1' }] },
         { day: 21, refs: [{ text: 'Sl 6, 8-10, 14, 16, 19, 21', link: 'https://www.bibliaonline.com.br/nvt/sl/6' }] },
@@ -308,13 +315,22 @@
         { day: 27, refs: [{ text: 'Sl 81, 88, 92-93', link: 'https://www.bibliaonline.com.br/nvt/sl/81' }] },
         { day: 28, refs: [{ text: '1Cr 7-10', link: 'https://www.bibliaonline.com.br/nvt/1cr/7' }] },
         { day: 29, refs: [{ text: 'Sl 102-104', link: 'https://www.bibliaonline.com.br/nvt/sl/102' }] },
-        { day: 30, refs: [{ text: '2Sm 5:1-10', link: 'https://www.bibliaonline.com.br/nvt/2sm/5' }, { text: '1Cr 11-12', link: 'https://www.bibliaonline.com.br/nvt/1cr/11' }] }
+        { day: 30, refs: [
+            { text: '2Sm 5:1-10', link: 'https://www.bibliaonline.com.br/nvt/2sm/5' }, 
+            { text: '1Cr 11-12', link: 'https://www.bibliaonline.com.br/nvt/1cr/11' }
+        ] }
       ],
       "Maio": [
-        { day: 1, refs: [{ text: '2Sm 5:1–10', link: 'https://www.bibliaonline.com.br/nvt/2sm/5' }, { text: '1Cr 11–12', link: 'https://www.bibliaonline.com.br/nvt/1cr/11' }] },
+        { day: 1, refs: [
+            { text: '2Sm 5:1–10', link: 'https://www.bibliaonline.com.br/nvt/2sm/5/1' },
+            { text: '1Cr 11–12', link: 'https://www.bibliaonline.com.br/nvt/1cr/11' }
+        ] },
         { day: 2, refs: [{ text: 'Sl 133', link: 'https://www.bibliaonline.com.br/nvt/sl/133' }] },
         { day: 3, refs: [{ text: 'Sl 106–107', link: 'https://www.bibliaonline.com.br/nvt/sl/106' }] },
-        { day: 4, refs: [{ text: '2Sm 5:11–6:23', link: 'https://www.bibliaonline.com.br/nvt/2sm/5' }, { text: '1Cr 13–16', link: 'https://www.bibliaonline.com.br/nvt/1cr/13' }] },
+        { day: 4, refs: [
+            { text: '2Sm 5:11–6:23', link: 'https://www.bibliaonline.com.br/nvt/2sm/5/11' },
+            { text: '1Cr 13–16', link: 'https://www.bibliaonline.com.br/nvt/1cr/13' }
+        ] },
         { day: 5, refs: [{ text: 'Sl 1–2, 15, 22, 24, 47, 68', link: 'https://www.bibliaonline.com.br/nvt/sl/1' }] },
         { day: 6, refs: [{ text: 'Sl 89, 96, 100, 101, 105, 132', link: 'https://www.bibliaonline.com.br/nvt/sl/89' }] },
         { day: 7, refs: [{ text: '2Sm 7', link: 'https://www.bibliaonline.com.br/nvt/2sm/7' }, { text: '1Cr 17', link: 'https://www.bibliaonline.com.br/nvt/1cr/17' }] },
@@ -394,7 +410,11 @@
         { day: 16, refs: [{ text: 'Is 13–17', link: 'https://www.bibliaonline.com.br/nvt/is/13' }] },
         { day: 17, refs: [{ text: 'Is 18–22', link: 'https://www.bibliaonline.com.br/nvt/is/18' }] },
         { day: 18, refs: [{ text: 'Is 23–27', link: 'https://www.bibliaonline.com.br/nvt/is/23' }] },
-        { day: 19, refs: [{ text: '2Re 18:1–8', link: 'https://www.bibliaonline.com.br/nvt/2re/18' }, { text: '2Cr 29–31', link: 'https://www.bibliaonline.com.br/nvt/2cr/29' }, { text: 'Sl 48', link: 'https://www.bibliaonline.com.br/nvt/sl/48' }] },
+        { day: 19, refs: [
+            { text: '2Re 18:1–8', link: 'https://www.bibliaonline.com.br/nvt/2re/18/1' },
+            { text: '2Cr 29–31', link: 'https://www.bibliaonline.com.br/nvt/2cr/29' }, 
+            { text: 'Sl 48', link: 'https://www.bibliaonline.com.br/nvt/sl/48' }
+        ] },
         { day: 20, refs: [{ text: 'Os 1–7', link: 'https://www.bibliaonline.com.br/nvt/os/1' }] },
         { day: 21, refs: [{ text: 'Os 8–14', link: 'https://www.bibliaonline.com.br/nvt/os/8' }] },
         { day: 22, refs: [{ text: 'Is 28–30', link: 'https://www.bibliaonline.com.br/nvt/is/28' }] },
@@ -403,7 +423,10 @@
         { day: 25, refs: [{ text: 'Is 37–39', link: 'https://www.bibliaonline.com.br/nvt/is/37' }, { text: 'Sl 76', link: 'https://www.bibliaonline.com.br/nvt/sl/76' }] },
         { day: 26, refs: [{ text: 'Is 40–43', link: 'https://www.bibliaonline.com.br/nvt/is/40' }] },
         { day: 27, refs: [{ text: 'Is 44–48', link: 'https://www.bibliaonline.com.br/nvt/is/44' }] },
-        { day: 28, refs: [{ text: '2Re 18:9–19:37', link: 'https://www.bibliaonline.com.br/nvt/2re/18' }, { text: 'Sl 46, 80, 135', link: 'https://www.bibliaonline.com.br/nvt/sl/46' }] },
+        { day: 28, refs: [
+            { text: '2Re 18:9–19:37', link: 'https://www.bibliaonline.com.br/nvt/2re/18/9' },
+            { text: 'Sl 46, 80, 135', link: 'https://www.bibliaonline.com.br/nvt/sl/46' }
+        ] },
         { day: 29, refs: [{ text: 'Is 49–53', link: 'https://www.bibliaonline.com.br/nvt/is/49' }] },
         { day: 30, refs: [{ text: 'Is 54–58', link: 'https://www.bibliaonline.com.br/nvt/is/54' }] },
         { day: 31, refs: [{ text: 'Is 59–63', link: 'https://www.bibliaonline.com.br/nvt/is/59' }] }
@@ -482,13 +505,26 @@
         { day: 6, refs: [{ text: 'Jo 2–4', link: 'https://www.bibliaonline.com.br/nvt/jo/2' }] },
         { day: 7, refs: [{ text: 'Mc 2', link: 'https://www.bibliaonline.com.br/nvt/mc/2' }] },
         { day: 8, refs: [{ text: 'Mc 3', link: 'https://www.bibliaonline.com.br/nvt/mc/3' }] },
-        { day: 9, refs: [{ text: 'Mt 12:1–21', link: 'https://www.bibliaonline.com.br/nvt/mt/12' }, { text: 'Jo 5', link: 'https://www.bibliaonline.com.br/nvt/jo/5' }, { text: 'Lc 6', link: 'https://www.bibliaonline.com.br/nvt/lc/6' }] },
+        { day: 9, refs: [
+            { text: 'Mt 12:1–21', link: 'https://www.bibliaonline.com.br/nvt/mt/12/1' }, 
+            { text: 'Jo 5', link: 'https://www.bibliaonline.com.br/nvt/jo/5' }, 
+            { text: 'Lc 6', link: 'https://www.bibliaonline.com.br/nvt/lc/6' }
+        ] },
         { day: 10, refs: [{ text: 'Mt 5–7', link: 'https://www.bibliaonline.com.br/nvt/mt/5' }] },
-        { day: 11, refs: [{ text: 'Mt 8:1–13', link: 'https://www.bibliaonline.com.br/nvt/mt/8' }, { text: 'Lc 7', link: 'https://www.bibliaonline.com.br/nvt/lc/7' }] },
+        { day: 11, refs: [
+            { text: 'Mt 8:1–13', link: 'https://www.bibliaonline.com.br/nvt/mt/8/1' }, 
+            { text: 'Lc 7', link: 'https://www.bibliaonline.com.br/nvt/lc/7' }
+        ] },
         { day: 12, refs: [{ text: 'Mt 11', link: 'https://www.bibliaonline.com.br/nvt/mt/11' }] },
-        { day: 13, refs: [{ text: 'Mt 12:22–50', link: 'https://www.bibliaonline.com.br/nvt/mt/12' }, { text: 'Lc 11', link: 'https://www.bibliaonline.com.br/nvt/lc/11' }] },
+        { day: 13, refs: [
+            { text: 'Mt 12:22–50', link: 'https://www.bibliaonline.com.br/nvt/mt/12/22' }, 
+            { text: 'Lc 11', link: 'https://www.bibliaonline.com.br/nvt/lc/11' }
+        ] },
         { day: 14, refs: [{ text: 'Mt 13', link: 'https://www.bibliaonline.com.br/nvt/mt/13' }, { text: 'Lc 8', link: 'https://www.bibliaonline.com.br/nvt/lc/8' }] },
-        { day: 15, refs: [{ text: 'Mt 8:14–34', link: 'https://www.bibliaonline.com.br/nvt/mt/8' }, { text: 'Mc 4–5', link: 'https://www.bibliaonline.com.br/nvt/mc/4' }] },
+        { day: 15, refs: [
+            { text: 'Mt 8:14–34', link: 'https://www.bibliaonline.com.br/nvt/mt/8/14' }, 
+            { text: 'Mc 4–5', link: 'https://www.bibliaonline.com.br/nvt/mc/4' }
+        ] },
         { day: 16, refs: [{ text: 'Mt 9–10', link: 'https://www.bibliaonline.com.br/nvt/mt/9' }] },
         { day: 17, refs: [{ text: 'Mt 14', link: 'https://www.bibliaonline.com.br/nvt/mt/14' }, { text: 'Mc 6', link: 'https://www.bibliaonline.com.br/nvt/mc/6' }, { text: 'Lc 9:1–17', link: 'https://www.bibliaonline.com.br/nvt/lc/9' }] },
         { day: 18, refs: [{ text: 'Jo 6', link: 'https://www.bibliaonline.com.br/nvt/jo/6' }] },
@@ -545,12 +581,17 @@
         { day: 4, refs: [{ text: '2Co 1–4', link: 'https://www.bibliaonline.com.br/nvt/2co/1' }] },
         { day: 5, refs: [{ text: '2Co 5–9', link: 'https://www.bibliaonline.com.br/nvt/2co/5' }] },
         { day: 6, refs: [{ text: '2Co 10–13', link: 'https://www.bibliaonline.com.br/nvt/2co/10' }] },
-        { day: 7, refs: [{ text: 'At 20:1–3', link: 'https://www.bibliaonline.com.br/nvt/at/20' }, { text: 'Rm 1–3', link: 'https://www.bibliaonline.com.br/nvt/rm/1' }] },
+        { day: 7, refs: [
+            { text: 'At 20:1–3', link: 'https://www.bibliaonline.com.br/nvt/at/20/1' }, 
+            { text: 'Rm 1–3', link: 'https://www.bibliaonline.com.br/nvt/rm/1' }
+        ] },
         { day: 8, refs: [{ text: 'Rm 4–7', link: 'https://www.bibliaonline.com.br/nvt/rm/4' }] },
         { day: 9, refs: [{ text: 'Rm 8–10', link: 'https://www.bibliaonline.com.br/nvt/rm/8' }] },
         { day: 10, refs: [{ text: 'Rm 11–13', link: 'https://www.bibliaonline.com.br/nvt/rm/11' }] },
         { day: 11, refs: [{ text: 'Rm 14–16', link: 'https://www.bibliaonline.com.br/nvt/rm/14' }] },
-        { day: 12, refs: [{ text: 'At 20:4–23:35', link: 'https://www.bibliaonline.com.br/nvt/at/20' }] },
+        { day: 12, refs: [
+            { text: 'At 20:4–23:35', link: 'https://www.bibliaonline.com.br/nvt/at/20/4' }
+        ] },
         { day: 13, refs: [{ text: 'At 24–26', link: 'https://www.bibliaonline.com.br/nvt/at/24' }] },
         { day: 14, refs: [{ text: 'At 27–28', link: 'https://www.bibliaonline.com.br/nvt/at/27' }] },
         { day: 15, refs: [{ text: 'Cl 1–4', link: 'https://www.bibliaonline.com.br/nvt/cl/1' }, { text: 'Fm 1', link: 'https://www.bibliaonline.com.br/nvt/fm/1' }] },
@@ -583,9 +624,7 @@
     // ** ⚠️ ATUALIZE SUAS CHAVES DO FIREBASE AQUI ⚠️ **
     // ==========================================================
     const firebaseConfig = { 
-      // Se a sua chave for a mesma do exemplo, o verificador anterior
-      // estava sendo muito rígido. Garanta que esses são os valores CORRETOS
-      // do seu projeto no console do Firebase.
+      // SUBSTITUA ESTES VALORES PELOS SEUS DADOS REAIS DO CONSOLE DO FIREBASE!
       apiKey: "AIzaSyB8VTml_2O1NqPCAZyo0ikEoEce-DHfc-s", 
       authDomain: "plano-leitura2025.firebaseapp.com",
       projectId: "plano-leitura2025",
@@ -888,8 +927,7 @@
     };
 
     const initFirebase = async () => {
-      // ⚠️ A verificação estrita foi removida. O SDK do Firebase agora
-      // tentará a conexão independentemente do valor da chave.
+      // Remoção da verificação estrita para evitar o falso positivo da chave não configurada.
 
       try {
         const app = initializeApp(firebaseConfig);
