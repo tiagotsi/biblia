@@ -8,1033 +8,635 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* Estilos CSS */
     :root {
-      --bg: #f7f7f8;
-      --card: #ffffff;
-      --text: #0f172a;
-      --muted: #6b7280;
-      --primary: #0ea5e9;
-      --ring: rgba(14,165,233,.35);
-      --border: #e5e7eb;
-      --success: #22c55e;
-      --shadow: 0 1px 0 rgba(0,0,0,.03);
-      --today: #fef3c7;
-      --today-border: #f59e0b;
+      --bg: #f7f7f8; --card: #ffffff; --text: #0f172a; --muted: #6b7280;
+      --primary: #0ea5e9; --ring: rgba(14,165,233,.35); --border: #e5e7eb;
+      --success: #22c55e; --shadow: 0 1px 0 rgba(0,0,0,.03);
+      --today: #fef3c7; --today-border: #f59e0b;
     }
     html.dark {
-      --bg: #0b1220;
-      --card: #0f172a;
-      --text: #e5e7eb;
-      --muted: #a3aab7;
-      --primary: #38bdf8;
-      --ring: rgba(56,189,248,.35);
-      --border: #1f2a44;
-      --success: #22c55e;
-      --shadow: 0 1px 0 rgba(0,0,0,.25);
-      --today: #1e293b;
-      --today-border: #f59e0b;
-    }
-    @media (prefers-color-scheme: dark) {
-      html:not(.light):not(.dark) {
-        --bg: #0b1220;
-        --card: #0f172a;
-        --text: #e5e7eb;
-        --muted: #a3aab7;
-        --primary: #38bdf8;
-        --ring: rgba(56,189,248,.35);
-        --border: #1f2a44;
-        --success: #22c55e;
-        --shadow: 0 1px 0 rgba(0,0,0,.25);
-        --today: #1e293b;
-        --today-border: #f59e0b;
-      }
+      --bg: #0b1220; --card: #0f172a; --text: #e5e7eb; --muted: #a3aab7;
+      --primary: #38bdf8; --border: #1f2a44; --today: #1e293b;
     }
     * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-      background: var(--bg); color: var(--text);
-      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-    }
+    body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
     .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
-    header {
-      position: sticky; top: 0; z-index: 5;
-      background: linear-gradient(180deg, rgba(247,247,248,.97), rgba(247,247,248,.9));
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: saturate(140%) blur(6px);
-    }
-    html.dark header { background: linear-gradient(180deg, rgba(11,18,32,.9), rgba(11,18,32,.84)); }
-    header .wrap { max-width: 1100px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    h1 { font-size: 20px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+    header { position: sticky; top: 0; z-index: 5; background: rgba(247,247,248,.97); border-bottom: 1px solid var(--border); backdrop-filter: saturate(140%) blur(6px); }
+    html.dark header { background: rgba(11,18,32,.9); }
+    header .wrap { max-width: 1100px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+    h1 { font-size: 18px; font-weight: 600; margin: 0; }
     .top-right { display:flex; align-items:center; gap:10px; }
-    .month-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
-    .tab-btn {
-      appearance: none; border: 1px solid var(--border); background: var(--card); color: var(--text);
-      padding: 8px 12px; border-radius: 999px; font-size: 14px; cursor: pointer; transition: .2s;
-    }
-    .tab-btn:hover { border-color: var(--primary); box-shadow: 0 0 0 4px var(--ring); }
+    .month-tabs { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 24px 16px; overflow-x: auto; }
+    .tab-btn { appearance: none; border: 1px solid var(--border); background: var(--card); color: var(--text); padding: 8px 12px; border-radius: 999px; font-size: 14px; cursor: pointer; white-space: nowrap; }
     .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-    .months { padding-top: 20px; }
-    .mes { display: none; }
-    .mes.active { display: block; }
-    .year-progress { margin: 8px 0 16px; display:flex; align-items:center; gap:12px; }
-    .year-progress .bar { flex:1; height: 10px; background: #e5e7eb; border-radius: 999px; overflow: hidden; }
-    html.dark .year-progress .bar { background: #1f2a44; }
+    .year-progress { display:flex; align-items:center; gap:12px; }
+    .year-progress .bar { width: 100px; height: 8px; background: #e5e7eb; border-radius: 999px; overflow: hidden; }
     .year-progress .fill { height:100%; width:0%; background: var(--primary); transition: width .25s ease; }
-    .year-progress .label { font-size: 12px; color: var(--muted); min-width: 120px; text-align:right; }
-    .progress { display: flex; align-items: center; gap: 12px; margin: 8px 0 20px; }
+    .progress { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
     .progress .bar { flex: 1; height: 10px; background: #e5e7eb; border-radius: 999px; overflow: hidden; }
-    html.dark .progress .bar { background: #1f2a44; }
     .progress .bar .fill { height: 100%; width: 0%; background: var(--primary); transition: width .25s ease; }
-    .progress .percent { font-size: 12px; color: var(--muted); min-width: 48px; text-align: right; }
     .days-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
-    .day-card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px;
-      box-shadow: var(--shadow);
-      transition: border-color .2s, transform .2s, background .2s;
-    }
-    .day-card:hover { border-color: var(--primary); transform: translateY(-1px); }
-    .day-card strong { font-weight: 600; }
+    .day-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; box-shadow: var(--shadow); position: relative; }
+    .day-card.done { border-color: var(--success); }
     .refs { margin-top: 8px; display: grid; gap: 6px; }
     .link-wrap { display: inline-flex; align-items: center; gap: 8px; }
-    .link { text-decoration: none; font-weight: 600; color: var(--primary); }
-    .link:hover { text-decoration: underline; }
-    .link-status {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--success);
-      background: #fff; color: #fff; cursor: pointer; transition: .15s;
-    }
-    html.dark .link-status { background: #0b1220; }
+    .link { text-decoration: none; font-weight: 600; color: var(--primary); font-size: 14px; }
+    .link-status { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--success); background: transparent; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; }
     .link-status.checked { background: var(--success); }
-    .link-status:focus { outline: 3px solid var(--ring); outline-offset: 2px; }
-    .day-card.done { border-color: #86efac; box-shadow: 0 0 0 4px rgba(34,197,94,.15); }
-    .badge { display:inline-flex; align-items:center; gap:6px; background:var(--card); border:1px solid var(--border); padding:4px 8px; border-radius:999px; font-size:12px; color:var(--muted); margin-bottom: 20px;}
-    footer { color: var(--muted); font-size: 12px; text-align: center; padding: 28px 0 40px; }
-    .theme-toggle {
-      appearance: none; border: 1px solid var(--border); background: var(--card); color: var(--text);
-      border-radius: 10px; padding: 8px 10px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; gap: 8px;
-      transition: .2s;
-    }
-    .theme-toggle:hover { border-color: var(--primary); box-shadow: 0 0 0 4px var(--ring); }
-    .theme-icon { font-size: 16px; line-height: 1; }
-    .today { border-color: var(--today-border) !important; background: var(--today) !important; position: relative; }
-    .today .today-tag {
-      position: absolute; top: 10px; right: 12px; font-size: 11px; color: #92400e;
-      background: #fffbeb; border: 1px solid #f59e0b; border-radius: 999px; padding: 2px 8px;
-    }
-    html.dark .today .today-tag { background: #1f2937 !important; color: #fbbf24; border-color: #f59e0b; }
-
-    /* Estilos do FAB (mantidos do seu código) */
-    #authFab{position:fixed;right:18px;bottom:18px;z-index:999999;display:inline-flex;gap:10px;align-items:center;background:#fff;color:#111827;border:1px solid #e5e7eb;border-radius:999px;padding:10px 14px;box-shadow:0 24px 60px rgba(0,0,0,.25);font:500 13px/1 system-ui,-apple-system,Segoe UI,Roboto,Arial}
-    #authFab .muted{color:#6b7280}
-    #authFab button{appearance:none;border:1px solid #e5e7eb;background:#fff;color:#111827;padding:6px 12px;border-radius:999px;cursor:pointer;font:600 13px/1 system-ui,-apple-system,Segoe UI,Roboto,Arial}
-    #authFab button:hover{box-shadow:0 6px 20px rgba(0,0,0,.12)}
-    @media (prefers-color-scheme: dark){#authFab{background:#0f172a;color:#e5e7eb;border-color:#1f2a44}#authFab .muted{color:#93a1b5}#authFab button{border-color:#1f2a44;background:#111827;color:#e5e7eb}}
-    #authToast{position:fixed;right:18px;bottom:74px;max-width:420px;background:#111827;color:#fff;padding:10px 12px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.25);white-space:pre-wrap;z-index:999999;display:none}
+    .theme-toggle { appearance: none; border: 1px solid var(--border); background: var(--card); color: var(--text); border-radius: 10px; padding: 8px 10px; cursor: pointer; }
+    .today { border-color: var(--today-border) !important; background: var(--today) !important; }
+    .today-tag { position: absolute; top: 10px; right: 12px; font-size: 10px; background: #f59e0b; color: #fff; padding: 2px 6px; border-radius: 4px; }
+    .mes { display: none; }
+    .mes.active { display: block; }
+    #authFab { position:fixed; right:18px; bottom:18px; background:var(--card); border:1px solid var(--border); border-radius:999px; padding:8px 16px; box-shadow:0 10px 25px rgba(0,0,0,0.1); display:flex; gap:10px; align-items:center; z-index: 10; }
+    #authFab button { border:none; background:var(--primary); color:#fff; padding:5px 12px; border-radius:999px; cursor:pointer; font-weight:600; }
   </style>
-  <script>
-    // Inicialização de tema LIGHT/DARK
-    (function() {
-      const KEY = 'planoLeitura:theme';
-      const saved = localStorage.getItem(KEY);
-      if (saved === 'dark') document.documentElement.classList.add('dark');
-      if (saved === 'light') document.documentElement.classList.add('light');
-    })();
-  </script>
 </head>
 <body>
-  <header>
-    <div class="wrap">
-      <h1>Plano de Leitura Bíblica Anual</h1>
-      <div class="top-right">
-        <div class="year-progress" id="yearProgress" aria-label="Progresso anual">
-          <div class="bar"><div class="fill"></div></div>
-          <div class="label">Ano 0%</div>
-        </div>
-        <button id="toggleTheme" class="theme-toggle" type="button" aria-label="Alternar tema">
-          <span class="theme-icon" id="themeIcon">🌙</span><span id="themeText">Modo escuro</span>
-        </button>
+
+<header>
+  <div class="wrap">
+    <h1>PLANO DE LEITURA ANUAL (Canônico)</h1>
+    <div class="top-right">
+      <div class="year-progress" id="yearProgress">
+        <div class="bar"><div class="fill"></div></div>
+        <div class="label" style="font-size: 12px;">Ano 0%</div>
       </div>
+      <button id="toggleTheme" class="theme-toggle">🌙</button>
     </div>
-    <div class="wrap" style="padding-top: 8px;">
-      <div class="month-tabs" id="monthTabs">
-        </div>
-    </div>
-  </header>
-
-  <main class="container">
-    <div class="badge">Visual minimalista • progresso por mês + anual</div>
-    <div class="months" id="monthsRoot">
-      </div>
-  </main>
-
-  <footer>Feito com carinho • Progresso salvo neste dispositivo</footer>
-
-  <div id="authFab">
-    <span id="authState" class="muted">offline</span>
-    <button id="authEnter" type="button" title="Entrar com Google (popup)">Entrar</button>
-    <button id="authExit" type="button" style="display:none">Sair</button>
   </div>
-  <div id="authToast"></div>
+  <div class="month-tabs" id="monthTabs"></div>
+</header>
 
-  <script>
-    // JSON do Plano de Leitura - COM TODAS AS CORREÇÕES DE CHAVE E CONTEÚDO
-    const READING_PLAN = {
-      "Janeiro": [
-        { day: 1, refs: [{ text: 'Gn 1-3', link: 'https://www.bibliaonline.com.br/nvt/gn/1' }] },
-        { day: 2, refs: [{ text: 'Gn 4-7', link: 'https://www.bibliaonline.com.br/nvt/gn/4' }] },
-        { day: 3, refs: [{ text: 'Gn 8-11', link: 'https://www.bibliaonline.com.br/nvt/gn/8' }] },
-        { day: 4, refs: [{ text: 'Jó 1-5', link: 'https://www.bibliaonline.com.br/nvt/jó/1' }] },
-        { day: 5, refs: [{ text: 'Jó 6-9', link: 'https://www.bibliaonline.com.br/nvt/jó/6' }] },
-        { day: 6, refs: [{ text: 'Jó 10-13', link: 'https://www.bibliaonline.com.br/nvt/jó/10' }] },
-        { day: 7, refs: [{ text: 'Jó 14-16', link: 'https://www.bibliaonline.com.br/nvt/jó/14' }] },
-        { day: 8, refs: [{ text: 'Jó 17-20', link: 'https://www.bibliaonline.com.br/nvt/jó/17' }] },
-        { day: 9, refs: [{ text: 'Jó 21-23', link: 'https://www.bibliaonline.com.br/nvt/jó/21' }] },
-        { day: 10, refs: [{ text: 'Jó 24-28', link: 'https://www.bibliaonline.com.br/nvt/jó/24' }] },
-        { day: 11, refs: [{ text: 'Jó 29-31', link: 'https://www.bibliaonline.com.br/nvt/jó/29' }] },
-        { day: 12, refs: [{ text: 'Jó 32-34', link: 'https://www.bibliaonline.com.br/nvt/jó/32' }] },
-        { day: 13, refs: [{ text: 'Jó 35-37', link: 'https://www.bibliaonline.com.br/nvt/jó/35' }] },
-        { day: 14, refs: [{ text: 'Jó 38-39', link: 'https://www.bibliaonline.com.br/nvt/jó/38' }] },
-        { day: 15, refs: [{ text: 'Jó 40-42', link: 'https://www.bibliaonline.com.br/nvt/jó/40' }] },
-        { day: 16, refs: [{ text: 'Gn 12-15', link: 'https://www.bibliaonline.com.br/nvt/gn/12' }] },
-        { day: 17, refs: [{ text: 'Gn 16-18', link: 'https://www.bibliaonline.com.br/nvt/gn/16' }] },
-        { day: 18, refs: [{ text: 'Gn 19-21', link: 'https://www.bibliaonline.com.br/nvt/gn/19' }] },
-        { day: 19, refs: [{ text: 'Gn 22-24', link: 'https://www.bibliaonline.com.br/nvt/gn/22' }] },
-        { day: 20, refs: [{ text: 'Gn 25-26', link: 'https://www.bibliaonline.com.br/nvt/gn/25' }] },
-        { day: 21, refs: [{ text: 'Gn 27-29', link: 'https://www.bibliaonline.com.br/nvt/gn/27' }] },
-        { day: 22, refs: [{ text: 'Gn 30-31', link: 'https://www.bibliaonline.com.br/nvt/gn/30' }] },
-        { day: 23, refs: [{ text: 'Gn 32-34', link: 'https://www.bibliaonline.com.br/nvt/gn/32' }] },
-        { day: 24, refs: [{ text: 'Gn 35-37', link: 'https://www.bibliaonline.com.br/nvt/gn/35' }] },
-        { day: 25, refs: [{ text: 'Gn 38-40', link: 'https://www.bibliaonline.com.br/nvt/gn/38' }] },
-        { day: 26, refs: [{ text: 'Gn 41-42', link: 'https://www.bibliaonline.com.br/nvt/gn/41' }] },
-        { day: 27, refs: [{ text: 'Gn 43-45', link: 'https://www.bibliaonline.com.br/nvt/gn/43' }] },
-        { day: 28, refs: [{ text: 'Gn 46-47', link: 'https://www.bibliaonline.com.br/nvt/gn/46' }] },
-        { day: 29, refs: [{ text: 'Gn 48-50', link: 'https://www.bibliaonline.com.br/nvt/gn/48' }] },
-        { day: 30, refs: [{ text: 'Ex 1-3', link: 'https://www.bibliaonline.com.br/nvt/ex/1' }] },
-        { day: 31, refs: [{ text: 'Ex 4-6', link: 'https://www.bibliaonline.com.br/nvt/ex/4' }] }
-      ],
-      "Fevereiro": [
-        { day: 1, refs: [{ text: 'Ex 7-9', link: 'https://www.bibliaonline.com.br/nvt/ex/7' }] },
-        { day: 2, refs: [{ text: 'Ex 10-12', link: 'https://www.bibliaonline.com.br/nvt/ex/10' }] },
-        { day: 3, refs: [{ text: 'Ex 13-15', link: 'https://www.bibliaonline.com.br/nvt/ex/13' }] },
-        { day: 4, refs: [{ text: 'Ex 16-18', link: 'https://www.bibliaonline.com.br/nvt/ex/16' }] },
-        { day: 5, refs: [{ text: 'Ex 19-21', link: 'https://www.bibliaonline.com.br/nvt/ex/19' }] },
-        { day: 6, refs: [{ text: 'Ex 22-24', link: 'https://www.bibliaonline.com.br/nvt/ex/22' }] },
-        { day: 7, refs: [{ text: 'Ex 25-27', link: 'https://www.bibliaonline.com.br/nvt/ex/25' }] },
-        { day: 8, refs: [{ text: 'Ex 28-29', link: 'https://www.bibliaonline.com.br/nvt/ex/28' }] },
-        { day: 9, refs: [{ text: 'Ex 30-32', link: 'https://www.bibliaonline.com.br/nvt/ex/30' }] },
-        { day: 10, refs: [{ text: 'Ex 33-35', link: 'https://www.bibliaonline.com.br/nvt/ex/33' }] },
-        { day: 11, refs: [{ text: 'Ex 36-38', link: 'https://www.bibliaonline.com.br/nvt/ex/36' }] },
-        { day: 12, refs: [{ text: 'Ex 39-40', link: 'https://www.bibliaonline.com.br/nvt/ex/39' }] },
-        { day: 13, refs: [{ text: 'Lv 1-4', link: 'https://www.bibliaonline.com.br/nvt/lv/1' }] },
-        { day: 14, refs: [{ text: 'Lv 5-7', link: 'https://www.bibliaonline.com.br/nvt/lv/5' }] },
-        { day: 15, refs: [{ text: 'Lv 8-10', link: 'https://www.bibliaonline.com.br/nvt/lv/8' }] },
-        { day: 16, refs: [{ text: 'Lv 11-13', link: 'https://www.bibliaonline.com.br/nvt/lv/11' }] },
-        { day: 17, refs: [{ text: 'Lv 14-15', link: 'https://www.bibliaonline.com.br/nvt/lv/14' }] },
-        { day: 18, refs: [{ text: 'Lv 16-18', link: 'https://www.bibliaonline.com.br/nvt/lv/16' }] },
-        { day: 19, refs: [{ text: 'Lv 19-21', link: 'https://www.bibliaonline.com.br/nvt/lv/19' }] },
-        { day: 20, refs: [{ text: 'Lv 22-23', link: 'https://www.bibliaonline.com.br/nvt/lv/22' }] },
-        { day: 21, refs: [{ text: 'Lv 24-25', link: 'https://www.bibliaonline.com.br/nvt/lv/24' }] },
-        { day: 22, refs: [{ text: 'Lv 26-27', link: 'https://www.bibliaonline.com.br/nvt/lv/26' }] },
-        { day: 23, refs: [{ text: 'Nm 1-2', link: 'https://www.bibliaonline.com.br/nvt/nm/1' }] },
-        { day: 24, refs: [{ text: 'Nm 3-4', link: 'https://www.bibliaonline.com.br/nvt/nm/3' }] },
-        { day: 25, refs: [{ text: 'Nm 5-6', link: 'https://www.bibliaonline.com.br/nvt/nm/5' }] },
-        { day: 26, refs: [{ text: 'Nm 7', link: 'https://www.bibliaonline.com.br/nvt/nm/7' }] },
-        { day: 27, refs: [{ text: 'Nm 8-10', link: 'https://www.bibliaonline.com.br/nvt/nm/8' }] },
-        { day: 28, refs: [{ text: 'Nm 11-13', link: 'https://www.bibliaonline.com.br/nvt/nm/11' }] }
-      ],
-      "Março": [
-        { day: 1, refs: [{ text: 'Nm 14-15', link: 'https://www.bibliaonline.com.br/nvt/nm/14' }, { text: 'Sl 90', link: 'https://www.bibliaonline.com.br/nvt/sl/90' }] },
-        { day: 2, refs: [{ text: 'Nm 16-17', link: 'https://www.bibliaonline.com.br/nvt/nm/16' }] },
-        { day: 3, refs: [{ text: 'Nm 18-20', link: 'https://www.bibliaonline.com.br/nvt/nm/18' }] },
-        { day: 4, refs: [{ text: 'Nm 21-22', link: 'https://www.bibliaonline.com.br/nvt/nm/21' }] },
-        { day: 5, refs: [{ text: 'Nm 23-25', link: 'https://www.bibliaonline.com.br/nvt/nm/23' }] },
-        { day: 6, refs: [{ text: 'Nm 26-27', link: 'https://www.bibliaonline.com.br/nvt/nm/26' }] },
-        { day: 7, refs: [{ text: 'Nm 28-30', link: 'https://www.bibliaonline.com.br/nvt/nm/28' }] },
-        { day: 8, refs: [{ text: 'Nm 31-32', link: 'https://www.bibliaonline.com.br/nvt/nm/31' }] },
-        { day: 9, refs: [{ text: 'Nm 33-34', link: 'https://www.bibliaonline.com.br/nvt/nm/33' }] },
-        { day: 10, refs: [{ text: 'Nm 35-36', link: 'https://www.bibliaonline.com.br/nvt/nm/35' }] },
-        { day: 11, refs: [{ text: 'Dt 1-2', link: 'https://www.bibliaonline.com.br/nvt/dt/1' }] },
-        { day: 12, refs: [{ text: 'Dt 3-4', link: 'https://www.bibliaonline.com.br/nvt/dt/3' }] },
-        { day: 13, refs: [{ text: 'Dt 5-7', link: 'https://www.bibliaonline.com.br/nvt/dt/5' }] },
-        { day: 14, refs: [{ text: 'Dt 8-10', link: 'https://www.bibliaonline.com.br/nvt/dt/8' }] },
-        { day: 15, refs: [{ text: 'Dt 11-13', link: 'https://www.bibliaonline.com.br/nvt/dt/11' }] },
-        { day: 16, refs: [{ text: 'Dt 14-16', link: 'https://www.bibliaonline.com.br/nvt/dt/14' }] },
-        { day: 17, refs: [{ text: 'Dt 17-20', link: 'https://www.bibliaonline.com.br/nvt/dt/17' }] },
-        { day: 18, refs: [{ text: 'Dt 21-23', link: 'https://www.bibliaonline.com.br/nvt/dt/21' }] },
-        { day: 19, refs: [{ text: 'Dt 24-27', link: 'https://www.bibliaonline.com.br/nvt/dt/24' }] },
-        { day: 20, refs: [{ text: 'Dt 28-29', link: 'https://www.bibliaonline.com.br/nvt/dt/28' }] },
-        { day: 21, refs: [{ text: 'Dt 30-31', link: 'https://www.bibliaonline.com.br/nvt/dt/30' }] },
-        { day: 22, refs: [{ text: 'Dt 32-34', link: 'https://www.bibliaonline.com.br/nvt/dt/32' }, { text: 'Sl 91', link: 'https://www.bibliaonline.com.br/nvt/sl/91' }] },
-        { day: 23, refs: [{ text: 'Js 1-4', link: 'https://www.bibliaonline.com.br/nvt/js/1' }] },
-        { day: 24, refs: [{ text: 'Js 5-8', link: 'https://www.bibliaonline.com.br/nvt/js/5' }] },
-        { day: 25, refs: [{ text: 'Js 9-11', link: 'https://www.bibliaonline.com.br/nvt/js/9' }] },
-        { day: 26, refs: [{ text: 'Js 12-15', link: 'https://www.bibliaonline.com.br/nvt/js/12' }] },
-        { day: 27, refs: [{ text: 'Js 16-18', link: 'https://www.bibliaonline.com.br/nvt/js/16' }] },
-        { day: 28, refs: [{ text: 'Js 19-21', link: 'https://www.bibliaonline.com.br/nvt/js/19' }] },
-        { day: 29, refs: [{ text: 'Js 22-24', link: 'https://www.bibliaonline.com.br/nvt/js/22' }] },
-        { day: 30, refs: [{ text: 'Jz 1-2', link: 'https://www.bibliaonline.com.br/nvt/jz/1' }] },
-        { day: 31, refs: [{ text: 'Jz 3-5', link: 'https://www.bibliaonline.com.br/nvt/jz/3' }] }
-      ],
-      "Abril": [
-        { day: 1, refs: [{ text: 'Jz 6-7', link: 'https://www.bibliaonline.com.br/nvt/jz/6' }] },
-        { day: 2, refs: [{ text: 'Jz 8-9', link: 'https://www.bibliaonline.com.br/nvt/jz/8' }] },
-        { day: 3, refs: [{ text: 'Jz 10-12', link: 'https://www.bibliaonline.com.br/nvt/jz/10' }] },
-        { day: 4, refs: [{ text: 'Jz 13-15', link: 'https://www.bibliaonline.com.br/nvt/jz/13' }] },
-        { day: 5, refs: [{ text: 'Jz 16-18', link: 'https://www.bibliaonline.com.br/nvt/jz/16' }] },
-        { day: 6, refs: [{ text: 'Jz 19-21', link: 'https://www.bibliaonline.com.br/nvt/jz/19' }] },
-        { day: 7, refs: [{ text: 'Rt 1-4', link: 'https://www.bibliaonline.com.br/nvt/rt/1' }] },
-        { day: 8, refs: [{ text: '1Sm 1-3', link: 'https://www.bibliaonline.com.br/nvt/1sm/1' }] },
-        { day: 9, refs: [{ text: '1Sm 4-8', link: 'https://www.bibliaonline.com.br/nvt/1sm/4' }] },
-        { day: 10, refs: [{ text: '1Sm 9-12', link: 'https://www.bibliaonline.com.br/nvt/1sm/9' }] },
-        { day: 11, refs: [{ text: '1Sm 13-14', link: 'https://www.bibliaonline.com.br/nvt/1sm/13' }] },
-        { day: 12, refs: [{ text: '1Sm 15-17', link: 'https://www.bibliaonline.com.br/nvt/1sm/15' }] },
-        { day: 13, refs: [
-            { text: '1Sm 18-20', link: 'https://www.bibliaonline.com.br/nvt/1sm/18/1' }, 
-            { text: 'Sl 11', link: 'https://www.bibliaonline.com.br/nvt/sl/11' }, 
-            { text: 'Sl 59', link: 'https://www.bibliaonline.com.br/nvt/sl/59' }
-        ] },
-        { day: 14, refs: [{ text: 'Sl 7, 27, 31, 34, 52', link: 'https://www.bibliaonline.com.br/nvt/sl/7' }] },
-        { day: 15, refs: [{ text: 'Sl 56, 120, 140-142', link: 'https://www.bibliaonline.com.br/nvt/sl/56' }] },
-        { day: 16, refs: [{ text: '1Sm 25-27', link: 'https://www.bibliaonline.com.br/nvt/1sm/25' }] },
-        { day: 17, refs: [{ text: 'Sl 17, 35, 54, 63', link: 'https://www.bibliaonline.com.br/nvt/sl/17' }] },
-        { day: 18, refs: [
-            { text: '1Sm 28-31', link: 'https://www.bibliaonline.com.br/nvt/1sm/28' }, 
-            { text: 'Sl 18', link: 'https://www.bibliaonline.com.br/nvt/sl/18' }
-        ] },
-        { day: 19, refs: [{ text: 'Sl 121, 123-125, 128-130', link: 'https://www.bibliaonline.com.br/nvt/sl/121' }] },
-        { day: 20, refs: [{ text: '2Sm 1-4', link: 'https://www.bibliaonline.com.br/nvt/2sm/1' }] },
-        { day: 21, refs: [{ text: 'Sl 6, 8-10, 14, 16, 19, 21', link: 'https://www.bibliaonline.com.br/nvt/sl/6' }] },
-        { day: 22, refs: [{ text: '1Cr 1-2', link: 'https://www.bibliaonline.com.br/nvt/1cr/1' }] },
-        { day: 23, refs: [{ text: 'Sl 43-45, 49, 84-85, 87', link: 'https://www.bibliaonline.com.br/nvt/sl/43' }] },
-        { day: 24, refs: [{ text: '1Cr 3-5', link: 'https://www.bibliaonline.com.br/nvt/1cr/3' }] },
-        { day: 25, refs: [{ text: 'Sl 73, 77-78', link: 'https://www.bibliaonline.com.br/nvt/sl/73' }] },
-        { day: 26, refs: [{ text: '1Cr 6', link: 'https://www.bibliaonline.com.br/nvt/1cr/6' }] },
-        { day: 27, refs: [{ text: 'Sl 81, 88, 92-93', link: 'https://www.bibliaonline.com.br/nvt/sl/81' }] },
-        { day: 28, refs: [{ text: '1Cr 7-10', link: 'https://www.bibliaonline.com.br/nvt/1cr/7' }] },
-        { day: 29, refs: [{ text: 'Sl 102-104', link: 'https://www.bibliaonline.com.br/nvt/sl/102' }] },
-        { day: 30, refs: [
-            { text: '2Sm 5:1-10', link: 'https://www.bibliaonline.com.br/nvt/2sm/5' }, 
-            { text: '1Cr 11-12', link: 'https://www.bibliaonline.com.br/nvt/1cr/11' }
-        ] }
-      ],
-      "Maio": [
-        { day: 1, refs: [
-            { text: '2Sm 5:1–10', link: 'https://www.bibliaonline.com.br/nvt/2sm/5/1' },
-            { text: '1Cr 11–12', link: 'https://www.bibliaonline.com.br/nvt/1cr/11' }
-        ] },
-        { day: 2, refs: [{ text: 'Sl 133', link: 'https://www.bibliaonline.com.br/nvt/sl/133' }] },
-        { day: 3, refs: [{ text: 'Sl 106–107', link: 'https://www.bibliaonline.com.br/nvt/sl/106' }] },
-        { day: 4, refs: [
-            { text: '2Sm 5:11–6:23', link: 'https://www.bibliaonline.com.br/nvt/2sm/5/11' },
-            { text: '1Cr 13–16', link: 'https://www.bibliaonline.com.br/nvt/1cr/13' }
-        ] },
-        { day: 5, refs: [{ text: 'Sl 1–2, 15, 22, 24, 47, 68', link: 'https://www.bibliaonline.com.br/nvt/sl/1' }] },
-        { day: 6, refs: [{ text: 'Sl 89, 96, 100, 101, 105, 132', link: 'https://www.bibliaonline.com.br/nvt/sl/89' }] },
-        { day: 7, refs: [{ text: '2Sm 7', link: 'https://www.bibliaonline.com.br/nvt/2sm/7' }, { text: '1Cr 17', link: 'https://www.bibliaonline.com.br/nvt/1cr/17' }] },
-        { day: 8, refs: [{ text: 'Sl 25, 29, 33, 36, 39', link: 'https://www.bibliaonline.com.br/nvt/sl/25' }] },
-        { day: 9, refs: [{ text: '2Sm 8–9', link: 'https://www.bibliaonline.com.br/nvt/2sm/8' }, { text: '1Cr 18', link: 'https://www.bibliaonline.com.br/nvt/1cr/18' }] },
-        { day: 10, refs: [{ text: 'Sl 50, 53, 60, 75', link: 'https://www.bibliaonline.com.br/nvt/sl/50' }] },
-        { day: 11, refs: [{ text: '2Sm 10', link: 'https://www.bibliaonline.com.br/nvt/2sm/10' }, { text: '1Cr 19', link: 'https://www.bibliaonline.com.br/nvt/1cr/19' }, { text: 'Sl 20', link: 'https://www.bibliaonline.com.br/nvt/sl/20' }] },
-        { day: 12, refs: [{ text: 'Sl 65–67, 69–70', link: 'https://www.bibliaonline.com.br/nvt/sl/65' }] },
-        { day: 13, refs: [{ text: '2Sm 11–12', link: 'https://www.bibliaonline.com.br/nvt/2sm/11' }, { text: '1Cr 20', link: 'https://www.bibliaonline.com.br/nvt/1cr/20' }] },
-        { day: 14, refs: [{ text: 'Sl 32, 51, 86, 122', link: 'https://www.bibliaonline.com.br/nvt/sl/32' }] },
-        { day: 15, refs: [{ text: '2Sm 13–15', link: 'https://www.bibliaonline.com.br/nvt/2sm/13' }] },
-        { day: 16, refs: [{ text: 'Sl 3–4, 12–13, 28, 55', link: 'https://www.bibliaonline.com.br/nvt/sl/3' }] },
-        { day: 17, refs: [{ text: '2Sm 16–18', link: 'https://www.bibliaonline.com.br/nvt/2sm/16' }] },
-        { day: 18, refs: [{ text: 'Sl 26, 40, 58, 61–62, 64', link: 'https://www.bibliaonline.com.br/nvt/sl/26' }] },
-        { day: 19, refs: [{ text: '2Sm 19–21', link: 'https://www.bibliaonline.com.br/nvt/2sm/19' }] },
-        { day: 20, refs: [{ text: 'Sl 5, 38, 41–42', link: 'https://www.bibliaonline.com.br/nvt/sl/5' }] },
-        { day: 21, refs: [{ text: '2Sm 22–23', link: 'https://www.bibliaonline.com.br/nvt/2sm/22' }, { text: 'Sl 57', link: 'https://www.bibliaonline.com.br/nvt/sl/57' }] },
-        { day: 22, refs: [{ text: 'Sl 95, 97–99', link: 'https://www.bibliaonline.com.br/nvt/sl/95' }] },
-        { day: 23, refs: [{ text: '2Sm 24', link: 'https://www.bibliaonline.com.br/nvt/2sm/24' }, { text: '1Cr 21–22', link: 'https://www.bibliaonline.com.br/nvt/1cr/21' }, { text: 'Sl 30', link: 'https://www.bibliaonline.com.br/nvt/sl/30' }] },
-        { day: 24, refs: [{ text: 'Sl 108–110', link: 'https://www.bibliaonline.com.br/nvt/sl/108' }] },
-        { day: 25, refs: [{ text: '1Cr 23–25', link: 'https://www.bibliaonline.com.br/nvt/1cr/23' }] },
-        { day: 26, refs: [{ text: 'Sl 131, 138–139, 143–145', link: 'https://www.bibliaonline.com.br/nvt/sl/131' }] },
-        { day: 27, refs: [{ text: '1Cr 26–29', link: 'https://www.bibliaonline.com.br/nvt/1cr/26' }, { text: 'Sl 127', link: 'https://www.bibliaonline.com.br/nvt/sl/127' }] },
-        { day: 28, refs: [{ text: 'Sl 111–118', link: 'https://www.bibliaonline.com.br/nvt/sl/111' }] },
-        { day: 29, refs: [{ text: '1Re 1–2', link: 'https://www.bibliaonline.com.br/nvt/1re/1' }, { text: 'Sl 37', link: 'https://www.bibliaonline.com.br/nvt/sl/37' }, { text: 'Sl 71', link: 'https://www.bibliaonline.com.br/nvt/sl/71' }, { text: 'Sl 94', link: 'https://www.bibliaonline.com.br/nvt/sl/94' }] },
-        { day: 30, refs: [{ text: 'Sl 119:1–88', link: 'https://www.bibliaonline.com.br/nvt/sl/119' }] },
-        { day: 31, refs: [{ text: '1Re 3–4', link: 'https://www.bibliaonline.com.br/nvt/1re/3' }, { text: '2Cr 1', link: 'https://www.bibliaonline.com.br/nvt/2cr/1' }, { text: 'Sl 72', link: 'https://www.bibliaonline.com.br/nvt/sl/72' }] }
-      ],
-      "Junho": [
-        { day: 1, refs: [{ text: 'Sl 119:89–176', link: 'https://www.bibliaonline.com.br/nvt/sl/119' }] },
-        { day: 2, refs: [{ text: 'Ct 1-8', link: 'https://www.bibliaonline.com.br/nvt/ct/1' }] },
-        { day: 3, refs: [{ text: 'Pv 1-3', link: 'https://www.bibliaonline.com.br/nvt/pv/1' }] },
-        { day: 4, refs: [{ text: 'Pv 4-6', link: 'https://www.bibliaonline.com.br/nvt/pv/4' }] },
-        { day: 5, refs: [{ text: 'Pv 7-9', link: 'https://www.bibliaonline.com.br/nvt/pv/7' }] },
-        { day: 6, refs: [{ text: 'Pv 10-12', link: 'https://www.bibliaonline.com.br/nvt/pv/10' }] },
-        { day: 7, refs: [{ text: 'Pv 13-15', link: 'https://www.bibliaonline.com.br/nvt/pv/13' }] },
-        { day: 8, refs: [{ text: 'Pv 16-18', link: 'https://www.bibliaonline.com.br/nvt/pv/16' }] },
-        { day: 9, refs: [{ text: 'Pv 19-21', link: 'https://www.bibliaonline.com.br/nvt/pv/19' }] },
-        { day: 10, refs: [{ text: 'Pv 22-24', link: 'https://www.bibliaonline.com.br/nvt/pv/22' }] },
-        { day: 11, refs: [{ text: '1Re 5–6', link: 'https://www.bibliaonline.com.br/nvt/1re/5' }, { text: '2Cr 2–3', link: 'https://www.bibliaonline.com.br/nvt/2cr/2' }] },
-        { day: 12, refs: [{ text: '1Re 7', link: 'https://www.bibliaonline.com.br/nvt/1re/7' }, { text: '2Cr 4', link: 'https://www.bibliaonline.com.br/nvt/2cr/4' }] },
-        { day: 13, refs: [{ text: '1Re 8', link: 'https://www.bibliaonline.com.br/nvt/1re/8' }, { text: '2Cr 5', link: 'https://www.bibliaonline.com.br/nvt/2cr/5' }] },
-        { day: 14, refs: [{ text: '2Cr 6-7', link: 'https://www.bibliaonline.com.br/nvt/2cr/6' }, { text: 'Sl 136', link: 'https://www.bibliaonline.com.br/nvt/sl/136' }] },
-        { day: 15, refs: [{ text: 'Sl 134, 146–150', link: 'https://www.bibliaonline.com.br/nvt/sl/134' }] },
-        { day: 16, refs: [{ text: '1Re 9', link: 'https://www.bibliaonline.com.br/nvt/1re/9' }, { text: '2Cr 8', link: 'https://www.bibliaonline.com.br/nvt/2cr/8' }] },
-        { day: 17, refs: [{ text: 'Pv 25-26', link: 'https://www.bibliaonline.com.br/nvt/pv/25' }] },
-        { day: 18, refs: [{ text: 'Pv 27-29', link: 'https://www.bibliaonline.com.br/nvt/pv/27' }] },
-        { day: 19, refs: [{ text: 'Ec 1-6', link: 'https://www.bibliaonline.com.br/nvt/ec/1' }] },
-        { day: 20, refs: [{ text: 'Ec 7-12', link: 'https://www.bibliaonline.com.br/nvt/ec/7' }] },
-        { day: 21, refs: [{ text: '1Re 10–11', link: 'https://www.bibliaonline.com.br/nvt/1re/10' }, { text: '2Cr 9', link: 'https://www.bibliaonline.com.br/nvt/2cr/9' }] },
-        { day: 22, refs: [{ text: 'Pv 30–31', link: 'https://www.bibliaonline.com.br/nvt/pv/30' }] },
-        { day: 23, refs: [{ text: '1Re 12–14', link: 'https://www.bibliaonline.com.br/nvt/1re/12' }] },
-        { day: 24, refs: [{ text: '2Cr 10–12', link: 'https://www.bibliaonline.com.br/nvt/2cr/10' }] },
-        { day: 25, refs: [{ text: '1Re 15:1–24', link: 'https://www.bibliaonline.com.br/nvt/1re/15' }, { text: '2Cr 13–16', link: 'https://www.bibliaonline.com.br/nvt/2cr/13' }] },
-        { day: 26, refs: [{ text: '1Re 15:25–16:34', link: 'https://www.bibliaonline.com.br/nvt/1re/15' }, { text: '2Cr 17', link: 'https://www.bibliaonline.com.br/nvt/2cr/17' }] },
-        { day: 27, refs: [{ text: '1Re 17–19', link: 'https://www.bibliaonline.com.br/nvt/1re/17' }] },
-        { day: 28, refs: [{ text: '1Re 20–21', link: 'https://www.bibliaonline.com.br/nvt/1re/20' }] },
-        { day: 29, refs: [{ text: '1Re 22', link: 'https://www.bibliaonline.com.br/nvt/1re/22' }, { text: '2Cr 18', link: 'https://www.bibliaonline.com.br/nvt/2cr/18' }] },
-        { day: 30, refs: [{ text: '2Cr 19–23', link: 'https://www.bibliaonline.com.br/nvt/2cr/19' }] }
-      ],
-      "Julho": [
-        { day: 1, refs: [{ text: 'Ob 1', link: 'https://www.bibliaonline.com.br/nvt/ob/1' }, { text: 'Sl 82–83', link: 'https://www.bibliaonline.com.br/nvt/sl/82' }] },
-        { day: 2, refs: [{ text: '2Re 1–4', link: 'https://www.bibliaonline.com.br/nvt/2re/1' }] },
-        { day: 3, refs: [{ text: '2Re 5–8', link: 'https://www.bibliaonline.com.br/nvt/2re/5' }] },
-        { day: 4, refs: [{ text: '2Re 9–11', link: 'https://www.bibliaonline.com.br/nvt/2re/9' }] },
-        { day: 5, refs: [{ text: '2Re 12–13', link: 'https://www.bibliaonline.com.br/nvt/2re/12' }, { text: '2Cr 24', link: 'https://www.bibliaonline.com.br/nvt/2cr/24' }] },
-        { day: 6, refs: [{ text: '2Re 14', link: 'https://www.bibliaonline.com.br/nvt/2re/14' }, { text: '2Cr 25', link: 'https://www.bibliaonline.com.br/nvt/2cr/25' }] },
-        { day: 7, refs: [{ text: 'Jn 1–4', link: 'https://www.bibliaonline.com.br/nvt/jn/1' }] },
-        { day: 8, refs: [{ text: '2Re 15', link: 'https://www.bibliaonline.com.br/nvt/2re/15' }, { text: '2Cr 26', link: 'https://www.bibliaonline.com.br/nvt/2cr/26' }] },
-        { day: 9, refs: [{ text: 'Is 1–4', link: 'https://www.bibliaonline.com.br/nvt/is/1' }] },
-        { day: 10, refs: [{ text: 'Is 5–8', link: 'https://www.bibliaonline.com.br/nvt/is/5' }] },
-        { day: 11, refs: [{ text: 'Am 1–5', link: 'https://www.bibliaonline.com.br/nvt/am/1' }] },
-        { day: 12, refs: [{ text: 'Am 6–9', link: 'https://www.bibliaonline.com.br/nvt/am/6' }] },
-        { day: 13, refs: [{ text: '2Cr 27', link: 'https://www.bibliaonline.com.br/nvt/2cr/27' }, { text: 'Is 9–12', link: 'https://www.bibliaonline.com.br/nvt/is/9' }] },
-        { day: 14, refs: [{ text: 'Mq 1–7', link: 'https://www.bibliaonline.com.br/nvt/mq/1' }] },
-        { day: 15, refs: [{ text: '2Cr 28', link: 'https://www.bibliaonline.com.br/nvt/2cr/28' }, { text: '2Re 16–17', link: 'https://www.bibliaonline.com.br/nvt/2re/16' }] },
-        { day: 16, refs: [{ text: 'Is 13–17', link: 'https://www.bibliaonline.com.br/nvt/is/13' }] },
-        { day: 17, refs: [{ text: 'Is 18–22', link: 'https://www.bibliaonline.com.br/nvt/is/18' }] },
-        { day: 18, refs: [{ text: 'Is 23–27', link: 'https://www.bibliaonline.com.br/nvt/is/23' }] },
-        { day: 19, refs: [
-            { text: '2Re 18:1–8', link: 'https://www.bibliaonline.com.br/nvt/2re/18/1' },
-            { text: '2Cr 29–31', link: 'https://www.bibliaonline.com.br/nvt/2cr/29' }, 
-            { text: 'Sl 48', link: 'https://www.bibliaonline.com.br/nvt/sl/48' }
-        ] },
-        { day: 20, refs: [{ text: 'Os 1–7', link: 'https://www.bibliaonline.com.br/nvt/os/1' }] },
-        { day: 21, refs: [{ text: 'Os 8–14', link: 'https://www.bibliaonline.com.br/nvt/os/8' }] },
-        { day: 22, refs: [{ text: 'Is 28–30', link: 'https://www.bibliaonline.com.br/nvt/is/28' }] },
-        { day: 23, refs: [{ text: 'Is 31–34', link: 'https://www.bibliaonline.com.br/nvt/is/31' }] },
-        { day: 24, refs: [{ text: 'Is 35–36', link: 'https://www.bibliaonline.com.br/nvt/is/35' }] },
-        { day: 25, refs: [{ text: 'Is 37–39', link: 'https://www.bibliaonline.com.br/nvt/is/37' }, { text: 'Sl 76', link: 'https://www.bibliaonline.com.br/nvt/sl/76' }] },
-        { day: 26, refs: [{ text: 'Is 40–43', link: 'https://www.bibliaonline.com.br/nvt/is/40' }] },
-        { day: 27, refs: [{ text: 'Is 44–48', link: 'https://www.bibliaonline.com.br/nvt/is/44' }] },
-        { day: 28, refs: [
-            { text: '2Re 18:9–19:37', link: 'https://www.bibliaonline.com.br/nvt/2re/18/9' },
-            { text: 'Sl 46, 80, 135', link: 'https://www.bibliaonline.com.br/nvt/sl/46' }
-        ] },
-        { day: 29, refs: [{ text: 'Is 49–53', link: 'https://www.bibliaonline.com.br/nvt/is/49' }] },
-        { day: 30, refs: [{ text: 'Is 54–58', link: 'https://www.bibliaonline.com.br/nvt/is/54' }] },
-        { day: 31, refs: [{ text: 'Is 59–63', link: 'https://www.bibliaonline.com.br/nvt/is/59' }] }
-      ],
-      "Agosto": [
-        { day: 1, refs: [{ text: 'Is 64–66', link: 'https://www.bibliaonline.com.br/nvt/is/64' }] },
-        { day: 2, refs: [{ text: '2Re 20–21', link: 'https://www.bibliaonline.com.br/nvt/2re/20' }] },
-        { day: 3, refs: [{ text: '2Cr 32–33', link: 'https://www.bibliaonline.com.br/nvt/2cr/32' }] },
-        { day: 4, refs: [{ text: 'Na 1–3', link: 'https://www.bibliaonline.com.br/nvt/na/1' }] },
-        { day: 5, refs: [{ text: '2Re 22–23', link: 'https://www.bibliaonline.com.br/nvt/2re/22' }, { text: '2Cr 34–35', link: 'https://www.bibliaonline.com.br/nvt/2cr/34' }] },
-        { day: 6, refs: [{ text: 'Sf 1–3', link: 'https://www.bibliaonline.com.br/nvt/sf/1' }] },
-        { day: 7, refs: [{ text: 'Jr 1–3', link: 'https://www.bibliaonline.com.br/nvt/jr/1' }] },
-        { day: 8, refs: [{ text: 'Jr 4–6', link: 'https://www.bibliaonline.com.br/nvt/jr/4' }] },
-        { day: 9, refs: [{ text: 'Jr 7–9', link: 'https://www.bibliaonline.com.br/nvt/jr/7' }] },
-        { day: 10, refs: [{ text: 'Jr 10–13', link: 'https://www.bibliaonline.com.br/nvt/jr/10' }] },
-        { day: 11, refs: [{ text: 'Jr 14–17', link: 'https://www.bibliaonline.com.br/nvt/jr/14' }] },
-        { day: 12, refs: [{ text: 'Jr 18–22', link: 'https://www.bibliaonline.com.br/nvt/jr/18' }] },
-        { day: 13, refs: [{ text: 'Jr 23–25', link: 'https://www.bibliaonline.com.br/nvt/jr/23' }] },
-        { day: 14, refs: [{ text: 'Jr 26–29', link: 'https://www.bibliaonline.com.br/nvt/jr/26' }] },
-        { day: 15, refs: [{ text: 'Jr 30–31', link: 'https://www.bibliaonline.com.br/nvt/jr/30' }] },
-        { day: 16, refs: [{ text: 'Jr 32–34', link: 'https://www.bibliaonline.com.br/nvt/jr/32' }] },
-        { day: 17, refs: [{ text: 'Jr 35–37', link: 'https://www.bibliaonline.com.br/nvt/jr/35' }] },
-        { day: 18, refs: [{ text: 'Jr 38–40', link: 'https://www.bibliaonline.com.br/nvt/jr/38' }, { text: 'Sl 74', link: 'https://www.bibliaonline.com.br/nvt/sl/74' }, { text: 'Sl 79', link: 'https://www.bibliaonline.com.br/nvt/sl/79' }] },
-        { day: 19, refs: [{ text: '2Re 24–25', link: 'https://www.bibliaonline.com.br/nvt/2re/24' }, { text: '2Cr 36', link: 'https://www.bibliaonline.com.br/nvt/2cr/36' }] },
-        { day: 20, refs: [{ text: 'Hc 1–3', link: 'https://www.bibliaonline.com.br/nvt/hc/1' }] },
-        { day: 21, refs: [{ text: 'Jr 41–45', link: 'https://www.bibliaonline.com.br/nvt/jr/41' }] },
-        { day: 22, refs: [{ text: 'Jr 46–48', link: 'https://www.bibliaonline.com.br/nvt/jr/46' }] },
-        { day: 23, refs: [{ text: 'Jr 49–50', link: 'https://www.bibliaonline.com.br/nvt/jr/49' }] },
-        { day: 24, refs: [{ text: 'Jr 51–52', link: 'https://www.bibliaonline.com.br/nvt/jr/51' }] },
-        { day: 25, refs: [{ text: 'Lm 1:1–3:36', link: 'https://www.bibliaonline.com.br/nvt/lm/1' }] },
-        { day: 26, refs: [{ text: 'Lm 3:37–5:22', link: 'https://www.bibliaonline.com.br/nvt/lm/3' }] },
-        { day: 27, refs: [{ text: 'Ez 1–4', link: 'https://www.bibliaonline.com.br/nvt/ez/1' }] },
-        { day: 28, refs: [{ text: 'Ez 5–8', link: 'https://www.bibliaonline.com.br/nvt/ez/5' }] },
-        { day: 29, refs: [{ text: 'Ez 9–12', link: 'https://www.bibliaonline.com.br/nvt/ez/9' }] },
-        { day: 30, refs: [{ text: 'Ez 13–15', link: 'https://www.bibliaonline.com.br/nvt/ez/13' }] },
-        { day: 31, refs: [{ text: 'Ez 16–17', link: 'https://www.bibliaonline.com.br/nvt/ez/16' }] }
-      ],
-      "Setembro": [
-        { day: 1, refs: [{ text: 'Ez 18–19', link: 'https://www.bibliaonline.com.br/nvt/ez/18' }] },
-        { day: 2, refs: [{ text: 'Ez 20–21', link: 'https://www.bibliaonline.com.br/nvt/ez/20' }] },
-        { day: 3, refs: [{ text: 'Ez 22–23', link: 'https://www.bibliaonline.com.br/nvt/ez/22' }] },
-        { day: 4, refs: [{ text: 'Ez 24–27', link: 'https://www.bibliaonline.com.br/nvt/ez/24' }] },
-        { day: 5, refs: [{ text: 'Ez 28–31', link: 'https://www.bibliaonline.com.br/nvt/ez/28' }] },
-        { day: 6, refs: [{ text: 'Ez 32–34', link: 'https://www.bibliaonline.com.br/nvt/ez/32' }] },
-        { day: 7, refs: [{ text: 'Ez 35–37', link: 'https://www.bibliaonline.com.br/nvt/ez/35' }] },
-        { day: 8, refs: [{ text: 'Ez 38–39', link: 'https://www.bibliaonline.com.br/nvt/ez/38' }] },
-        { day: 9, refs: [{ text: 'Ez 40–41', link: 'https://www.bibliaonline.com.br/nvt/ez/40' }] },
-        { day: 10, refs: [{ text: 'Ez 42–43', link: 'https://www.bibliaonline.com.br/nvt/ez/42' }] },
-        { day: 11, refs: [{ text: 'Ez 44–45', link: 'https://www.bibliaonline.com.br/nvt/ez/44' }] },
-        { day: 12, refs: [{ text: 'Ez 46–48', link: 'https://www.bibliaonline.com.br/nvt/ez/46' }] },
-        { day: 13, refs: [{ text: 'Jl 1–3', link: 'https://www.bibliaonline.com.br/nvt/jl/1' }] },
-        { day: 14, refs: [{ text: 'Dn 1–3', link: 'https://www.bibliaonline.com.br/nvt/dn/1' }] },
-        { day: 15, refs: [{ text: 'Dn 4–6', link: 'https://www.bibliaonline.com.br/nvt/dn/4' }] },
-        { day: 16, refs: [{ text: 'Dn 7–9', link: 'https://www.bibliaonline.com.br/nvt/dn/7' }] },
-        { day: 17, refs: [{ text: 'Dn 10–12', link: 'https://www.bibliaonline.com.br/nvt/dn/10' }] },
-        { day: 18, refs: [{ text: 'Ed 1–3', link: 'https://www.bibliaonline.com.br/nvt/ed/1' }] },
-        { day: 19, refs: [{ text: 'Ed 4–6', link: 'https://www.bibliaonline.com.br/nvt/ed/4' }, { text: 'Sl 137', link: 'https://www.bibliaonline.com.br/nvt/sl/137' }] },
-        { day: 20, refs: [{ text: 'Hag 1–2', link: 'https://www.bibliaonline.com.br/nvt/hag/1' }] },
-        { day: 21, refs: [{ text: 'Zech 1–7', link: 'https://www.bibliaonline.com.br/nvt/zech/1' }] },
-        { day: 22, refs: [{ text: 'Zech 8–14', link: 'https://www.bibliaonline.com.br/nvt/zech/8' }] },
-        { day: 23, refs: [{ text: 'Est 1–5', link: 'https://www.bibliaonline.com.br/nvt/est/1' }] },
-        { day: 24, refs: [{ text: 'Est 6–10', link: 'https://www.bibliaonline.com.br/nvt/est/6' }] },
-        { day: 25, refs: [{ text: 'Ed 7–10', link: 'https://www.bibliaonline.com.br/nvt/ed/7' }] },
-        { day: 26, refs: [{ text: 'Ne 1–5', link: 'https://www.bibliaonline.com.br/nvt/ne/1' }] },
-        { day: 27, refs: [{ text: 'Ne 6–7', link: 'https://www.bibliaonline.com.br/nvt/ne/6' }] },
-        { day: 28, refs: [{ text: 'Ne 8–10', link: 'https://www.bibliaonline.com.br/nvt/ne/8' }] },
-        { day: 29, refs: [{ text: 'Ne 11–13', link: 'https://www.bibliaonline.com.br/nvt/ne/11' }, { text: 'Sl 126', link: 'https://www.bibliaonline.com.br/nvt/sl/126' }] },
-        { day: 30, refs: [{ text: 'Ml 1–4', link: 'https://www.bibliaonline.com.br/nvt/ml/1' }] }
-      ],
-      "Outubro": [
-        { day: 1, refs: [{ text: 'Lc 1', link: 'https://www.bibliaonline.com.br/nvt/lc/1' }, { text: 'Jo 1:1–14', link: 'https://www.bibliaonline.com.br/nvt/jo/1' }] },
-        { day: 2, refs: [{ text: 'Mt 1', link: 'https://www.bibliaonline.com.br/nvt/mt/1' }, { text: 'Lc 2:1–38', link: 'https://www.bibliaonline.com.br/nvt/lc/2' }] },
-        { day: 3, refs: [{ text: 'Mt 2', link: 'https://www.bibliaonline.com.br/nvt/mt/2' }, { text: 'Lc 2:39–52', link: 'https://www.bibliaonline.com.br/nvt/lc/2' }] },
-        { day: 4, refs: [{ text: 'Mt 3', link: 'https://www.bibliaonline.com.br/nvt/mt/3' }, { text: 'Mc 1', link: 'https://www.bibliaonline.com.br/nvt/mc/1' }, { text: 'Lc 3', link: 'https://www.bibliaonline.com.br/nvt/lc/3' }] },
-        { day: 5, refs: [{ text: 'Mt 4', link: 'https://www.bibliaonline.com.br/nvt/mt/4' }, { text: 'Lc 4–5', link: 'https://www.bibliaonline.com.br/nvt/lc/4' }, { text: 'Jo 1:15–51', link: 'https://www.bibliaonline.com.br/nvt/jo/1' }] },
-        { day: 6, refs: [{ text: 'Jo 2–4', link: 'https://www.bibliaonline.com.br/nvt/jo/2' }] },
-        { day: 7, refs: [{ text: 'Mc 2', link: 'https://www.bibliaonline.com.br/nvt/mc/2' }] },
-        { day: 8, refs: [{ text: 'Mc 3', link: 'https://www.bibliaonline.com.br/nvt/mc/3' }] },
-        { day: 9, refs: [
-            { text: 'Mt 12:1–21', link: 'https://www.bibliaonline.com.br/nvt/mt/12/1' }, 
-            { text: 'Jo 5', link: 'https://www.bibliaonline.com.br/nvt/jo/5' }, 
-            { text: 'Lc 6', link: 'https://www.bibliaonline.com.br/nvt/lc/6' }
-        ] },
-        { day: 10, refs: [{ text: 'Mt 5–7', link: 'https://www.bibliaonline.com.br/nvt/mt/5' }] },
-        { day: 11, refs: [
-            { text: 'Mt 8:1–13', link: 'https://www.bibliaonline.com.br/nvt/mt/8/1' }, 
-            { text: 'Lc 7', link: 'https://www.bibliaonline.com.br/nvt/lc/7' }
-        ] },
-        { day: 12, refs: [{ text: 'Mt 11', link: 'https://www.bibliaonline.com.br/nvt/mt/11' }] },
-        { day: 13, refs: [
-            { text: 'Mt 12:22–50', link: 'https://www.bibliaonline.com.br/nvt/mt/12/22' }, 
-            { text: 'Lc 11', link: 'https://www.bibliaonline.com.br/nvt/lc/11' }
-        ] },
-        { day: 14, refs: [{ text: 'Mt 13', link: 'https://www.bibliaonline.com.br/nvt/mt/13' }, { text: 'Lc 8', link: 'https://www.bibliaonline.com.br/nvt/lc/8' }] },
-        { day: 15, refs: [
-            { text: 'Mt 8:14–34', link: 'https://www.bibliaonline.com.br/nvt/mt/8/14' }, 
-            { text: 'Mc 4–5', link: 'https://www.bibliaonline.com.br/nvt/mc/4' }
-        ] },
-        { day: 16, refs: [{ text: 'Mt 9–10', link: 'https://www.bibliaonline.com.br/nvt/mt/9' }] },
-        { day: 17, refs: [{ text: 'Mt 14', link: 'https://www.bibliaonline.com.br/nvt/mt/14' }, { text: 'Mc 6', link: 'https://www.bibliaonline.com.br/nvt/mc/6' }, { text: 'Lc 9:1–17', link: 'https://www.bibliaonline.com.br/nvt/lc/9' }] },
-        { day: 18, refs: [{ text: 'Jo 6', link: 'https://www.bibliaonline.com.br/nvt/jo/6' }] },
-        { day: 19, refs: [{ text: 'Mt 15', link: 'https://www.bibliaonline.com.br/nvt/mt/15' }, { text: 'Mc 7', link: 'https://www.bibliaonline.com.br/nvt/mc/7' }] },
-        { day: 20, refs: [{ text: 'Mt 16', link: 'https://www.bibliaonline.com.br/nvt/mt/16' }, { text: 'Mc 8', link: 'https://www.bibliaonline.com.br/nvt/mc/8' }, { text: 'Lc 9:18–27', link: 'https://www.bibliaonline.com.br/nvt/lc/9' }] },
-        { day: 21, refs: [{ text: 'Mt 17', link: 'https://www.bibliaonline.com.br/nvt/mt/17' }, { text: 'Mc 9', link: 'https://www.bibliaonline.com.br/nvt/mc/9' }, { text: 'Lc 9:28–62', link: 'https://www.bibliaonline.com.br/nvt/lc/9' }] },
-        { day: 22, refs: [{ text: 'Mt 18', link: 'https://www.bibliaonline.com.br/nvt/mt/18' }] },
-        { day: 23, refs: [{ text: 'Jo 7–8', link: 'https://www.bibliaonline.com.br/nvt/jo/7' }] },
-        { day: 24, refs: [{ text: 'Jo 9:1–10:21', link: 'https://www.bibliaonline.com.br/nvt/jo/9' }] },
-        { day: 25, refs: [{ text: 'Lc 10–11', link: 'https://www.bibliaonline.com.br/nvt/lc/10' }, { text: 'Jo 10:22–42', link: 'https://www.bibliaonline.com.br/nvt/jo/10' }] },
-        { day: 26, refs: [{ text: 'Lc 12–13', link: 'https://www.bibliaonline.com.br/nvt/lc/12' }] },
-        { day: 27, refs: [{ text: 'Lc 14–15', link: 'https://www.bibliaonline.com.br/nvt/lc/14' }] },
-        { day: 28, refs: [{ text: 'Lc 16–17:10', link: 'https://www.bibliaonline.com.br/nvt/lc/16' }] },
-        { day: 29, refs: [
-            { text: 'Jo 11–12', link: 'https://www.bibliaonline.com.br/nvt/jo/11' } // CORREÇÃO: João 12 incluído
-        ] },
-        { day: 30, refs: [{ text: 'Lc 17:11–18:14', link: 'https://www.bibliaonline.com.br/nvt/lc/17' }] },
-        { day: 31, refs: [{ text: 'Mt 19', link: 'https://www.bibliaonline.com.br/nvt/mt/19' }, { text: 'Mc 10', link: 'https://www.bibliaonline.com.br/nvt/mc/10' }] }
-      ],
-      "Novembro": [
-        { day: 1, refs: [{ text: 'Mt 20–21', link: 'https://www.bibliaonline.com.br/nvt/mt/20' }] },
-        { day: 2, refs: [{ text: 'Lc 18:15–19:48', link: 'https://www.bibliaonline.com.br/nvt/lc/18' }] },
-        { day: 3, refs: [{ text: 'Mc 11, 10–12', link: 'https://www.bibliaonline.com.br/nvt/mc/11' }] },
-        { day: 4, refs: [{ text: 'Mt 22', link: 'https://www.bibliaonline.com.br/nvt/mt/22' }, { text: 'Mc 12', link: 'https://www.bibliaonline.com.br/nvt/mc/12' }] },
-        { day: 5, refs: [{ text: 'Mt 23', link: 'https://www.bibliaonline.com.br/nvt/mt/23' }, { text: 'Lc 20–21', link: 'https://www.bibliaonline.com.br/nvt/lc/20' }] },
-        { day: 6, refs: [{ text: 'Mc 13', link: 'https://www.bibliaonline.com.br/nvt/mc/13' }] },
-        { day: 7, refs: [{ text: 'Mt 24', link: 'https://www.bibliaonline.com.br/nvt/mt/24' }] },
-        { day: 8, refs: [{ text: 'Mt 25', link: 'https://www.bibliaonline.com.br/nvt/mt/25' }] },
-        { day: 9, refs: [{ text: 'Mt 26', link: 'https://www.bibliaonline.com.br/nvt/mt/26' }, { text: 'Mc 14', link: 'https://www.bibliaonline.com.br/nvt/mc/14' }] },
-        { day: 10, refs: [{ text: 'Lc 22', link: 'https://www.bibliaonline.com.br/nvt/lc/22' }, { text: 'Jo 13', link: 'https://www.bibliaonline.com.br/nvt/jo/13' }] },
-        { day: 11, refs: [{ text: 'Jo 14–17', link: 'https://www.bibliaonline.com.br/nvt/jo/14' }] },
-        { day: 12, refs: [{ text: 'Mt 27', link: 'https://www.bibliaonline.com.br/nvt/mt/27' }, { text: 'Mc 15', link: 'https://www.bibliaonline.com.br/nvt/mc/15' }] },
-        { day: 13, refs: [{ text: 'Lc 23', link: 'https://www.bibliaonline.com.br/nvt/lc/23' }, { text: 'Jo 18–19', link: 'https://www.bibliaonline.com.br/nvt/jo/18' }] },
-        { day: 14, refs: [{ text: 'Mt 28', link: 'https://www.bibliaonline.com.br/nvt/mt/28' }, { text: 'Mc 16', link: 'https://www.bibliaonline.com.br/nvt/mc/16' }] },
-        { day: 15, refs: [{ text: 'Lc 24', link: 'https://www.bibliaonline.com.br/nvt/lc/24' }, { text: 'Jo 20–21', link: 'https://www.bibliaonline.com.br/nvt/jo/20' }] },
-        { day: 16, refs: [{ text: 'At 1–3', link: 'https://www.bibliaonline.com.br/nvt/at/1' }] },
-        { day: 17, refs: [{ text: 'At 4–6', link: 'https://www.bibliaonline.com.br/nvt/at/4' }] },
-        { day: 18, refs: [{ text: 'At 7–8', link: 'https://www.bibliaonline.com.br/nvt/at/7' }] },
-        { day: 19, refs: [{ text: 'At 9–10', link: 'https://www.bibliaonline.com.br/nvt/at/9' }] },
-        { day: 20, refs: [{ text: 'At 11–12', link: 'https://www.bibliaonline.com.br/nvt/at/11' }] },
-        { day: 21, refs: [{ text: 'At 13–14', link: 'https://www.bibliaonline.com.br/nvt/at/13' }] },
-        { day: 22, refs: [{ text: 'Tg 1–5', link: 'https://www.bibliaonline.com.br/nvt/tg/1' }] },
-        { day: 23, refs: [{ text: 'At 15–16', link: 'https://www.bibliaonline.com.br/nvt/at/15' }] },
-        { day: 24, refs: [{ text: 'Gl 1–3', link: 'https://www.bibliaonline.com.br/nvt/gl/1' }] },
-        { day: 25, refs: [{ text: 'Gl 4–6', link: 'https://www.bibliaonline.com.br/nvt/gl/4' }] },
-        { day: 26, refs: [{ text: 'At 17–18:18', link: 'https://www.bibliaonline.com.br/nvt/at/17' }] },
-        { day: 27, refs: [{ text: '1Ts 1–5', link: 'https://www.bibliaonline.com.br/nvt/1ts/1' }, { text: '2Ts 1–3', link: 'https://www.bibliaonline.com.br/nvt/2ts/1' }] },
-        { day: 28, refs: [{ text: 'At 18:19–19:41', link: 'https://www.bibliaonline.com.br/nvt/at/18' }] },
-        { day: 29, refs: [{ text: '1Co 1–4', link: 'https://www.bibliaonline.com.br/nvt/1co/1' }] },
-        { day: 30, refs: [{ text: '1Co 5–8', link: 'https://www.bibliaonline.com.br/nvt/1co/5' }] }
-      ],
-      "Dezembro": [
-        { day: 1, refs: [{ text: '1Co 9–11', link: 'https://www.bibliaonline.com.br/nvt/1co/9' }] },
-        { day: 2, refs: [{ text: '1Co 12–14', link: 'https://www.bibliaonline.com.br/nvt/1co/12' }] },
-        { day: 3, refs: [{ text: '1Co 15–16', link: 'https://www.bibliaonline.com.br/nvt/1co/15' }] },
-        { day: 4, refs: [{ text: '2Co 1–4', link: 'https://www.bibliaonline.com.br/nvt/2co/1' }] },
-        { day: 5, refs: [{ text: '2Co 5–9', link: 'https://www.bibliaonline.com.br/nvt/2co/5' }] },
-        { day: 6, refs: [{ text: '2Co 10–13', link: 'https://www.bibliaonline.com.br/nvt/2co/10' }] },
-        { day: 7, refs: [
-            { text: 'At 20:1–3', link: 'https://www.bibliaonline.com.br/nvt/at/20/1' }, 
-            { text: 'Rm 1–3', link: 'https://www.bibliaonline.com.br/nvt/rm/1' }
-        ] },
-        { day: 8, refs: [{ text: 'Rm 4–7', link: 'https://www.bibliaonline.com.br/nvt/rm/4' }] },
-        { day: 9, refs: [{ text: 'Rm 8–10', link: 'https://www.bibliaonline.com.br/nvt/rm/8' }] },
-        { day: 10, refs: [{ text: 'Rm 11–13', link: 'https://www.bibliaonline.com.br/nvt/rm/11' }] },
-        { day: 11, refs: [{ text: 'Rm 14–16', link: 'https://www.bibliaonline.com.br/nvt/rm/14' }] },
-        { day: 12, refs: [
-            { text: 'At 20:4–23:35', link: 'https://www.bibliaonline.com.br/nvt/at/20/4' }
-        ] },
-        { day: 13, refs: [{ text: 'At 24–26', link: 'https://www.bibliaonline.com.br/nvt/at/24' }] },
-        { day: 14, refs: [{ text: 'At 27–28', link: 'https://www.bibliaonline.com.br/nvt/at/27' }] },
-        { day: 15, refs: [{ text: 'Cl 1–4', link: 'https://www.bibliaonline.com.br/nvt/cl/1' }, { text: 'Fm 1', link: 'https://www.bibliaonline.com.br/nvt/fm/1' }] },
-        { day: 16, refs: [{ text: 'Ef 1–6', link: 'https://www.bibliaonline.com.br/nvt/ef/1' }] },
-        { day: 17, refs: [{ text: 'Fl 1–4', link: 'https://www.bibliaonline.com.br/nvt/fl/1' }] },
-        { day: 18, refs: [{ text: '1Tm 1–6', link: 'https://www.bibliaonline.com.br/nvt/1tm/1' }] },
-        { day: 19, refs: [{ text: 'Tt 1–3', link: 'https://www.bibliaonline.com.br/nvt/tt/1' }] },
-        { day: 20, refs: [{ text: '1Pe 1–5', link: 'https://www.bibliaonline.com.br/nvt/1pe/1' }] },
-        { day: 21, refs: [{ text: 'Hb 1–6', link: 'https://www.bibliaonline.com.br/nvt/hb/1' }] },
-        { day: 22, refs: [{ text: 'Hb 7–10', link: 'https://www.bibliaonline.com.br/nvt/hb/7' }] },
-        { day: 23, refs: [{ text: 'Hb 11–13', link: 'https://www.bibliaonline.com.br/nvt/hb/11' }] },
-        { day: 24, refs: [{ text: '2Tm 1–4', link: 'https://www.bibliaonline.com.br/nvt/2tm/1' }] },
-        { day: 25, refs: [{ text: '2Pe 1–3', link: 'https://www.bibliaonline.com.br/nvt/2pe/1' }, { text: 'Jd 1', link: 'https://www.bibliaonline.com.br/nvt/jd/1' }] },
-        { day: 26, refs: [{ text: '1Jo 1–5', link: 'https://www.bibliaonline.com.br/nvt/1jo/1' }] },
-        { day: 27, refs: [{ text: '2Jo 1', link: 'https://www.bibliaonline.com.br/nvt/2jo/1' }, { text: '3Jo 1', link: 'https://www.bibliaonline.com.br/nvt/3jo/1' }] },
-        { day: 28, refs: [{ text: 'Ap 1–5', link: 'https://www.bibliaonline.com.br/nvt/ap/1' }] },
-        { day: 29, refs: [{ text: 'Ap 6–11', link: 'https://www.bibliaonline.com.br/nvt/ap/6' }] },
-        { day: 30, refs: [{ text: 'Ap 12–18', link: 'https://www.bibliaonline.com.br/nvt/ap/12' }] },
-        { day: 31, refs: [{ text: 'Ap 19–22', link: 'https://www.bibliaonline.com.br/nvt/ap/19' }] }
-      ]
-    };
-  </script>
+<main class="container">
+  <div class="months" id="monthsRoot"></div>
+</main>
 
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
-    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js';
-    import { getFirestore, doc, getDoc, setDoc, enableIndexedDbPersistence } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js';
+<div id="authFab">
+  <span id="authState" style="font-size:12px; color:var(--muted)">offline</span>
+  <button id="authEnter">Entrar</button>
+  <button id="authExit" style="display:none">Sair</button>
+</div>
 
-    // ==========================================================
-    // ** ⚠️ ATUALIZE SUAS CHAVES DO FIREBASE AQUI ⚠️ **
-    // ==========================================================
-    const firebaseConfig = { 
-      // SUBSTITUA ESTES VALORES PELOS SEUS DADOS REAIS DO CONSOLE DO FIREBASE!
-      apiKey: "AIzaSyB8VTml_2O1NqPCAZyo0ikEoEce-DHfc-s", 
-      authDomain: "plano-leitura2025.firebaseapp.com",
-      projectId: "plano-leitura2025",
-      storageBucket: "plano-leitura2025.firebasestorage.app",
-      messagingSenderId: "382236825915",
-      appId: "1:382236825915:web:b63475cf14b3080abc7f1e" 
-    };
-    // ==========================================================
-    
-    const DEBUG = new URLSearchParams(location.search).get('debug') === '1';
-    const YEAR = String(new Date().getFullYear());
-    const LS_PREFIX = "planoLeitura:";
-    const THEME_KEY = 'planoLeitura:theme';
-    const MONTHS_PT = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js';
+  import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js';
 
-    // Utilitários de Sincronização
-    const toast = (m) => {
-      const t = document.getElementById('authToast'); 
-      if (!t) return; 
-      t.textContent = m; 
-      t.style.display = 'block'; 
-      clearTimeout(toast._t); 
-      toast._t = setTimeout(() => t.style.display = 'none', 8000); 
-    };
+  const READING_PLAN = {
+    "Janeiro": [
+      { day: 1, refs: [{ text: 'Gênesis 1–3', link: 'https://www.bibliaonline.com.br/nvt/gn/1' }] },
+      { day: 2, refs: [{ text: 'Gênesis 4–7', link: 'https://www.bibliaonline.com.br/nvt/gn/4' }] },
+      { day: 3, refs: [{ text: 'Gênesis 8–11', link: 'https://www.bibliaonline.com.br/nvt/gn/8' }] },
+      { day: 4, refs: [{ text: 'Gênesis 12–15', link: 'https://www.bibliaonline.com.br/nvt/gn/12' }] },
+      { day: 5, refs: [{ text: 'Gênesis 16–18', link: 'https://www.bibliaonline.com.br/nvt/gn/16' }] },
+      { day: 6, refs: [{ text: 'Gênesis 19–21', link: 'https://www.bibliaonline.com.br/nvt/gn/19' }] },
+      { day: 7, refs: [{ text: 'Gênesis 22–24', link: 'https://www.bibliaonline.com.br/nvt/gn/22' }] },
+      { day: 8, refs: [{ text: 'Gênesis 25–26', link: 'https://www.bibliaonline.com.br/nvt/gn/25' }] },
+      { day: 9, refs: [{ text: 'Gênesis 27–29', link: 'https://www.bibliaonline.com.br/nvt/gn/27' }] },
+      { day: 10, refs: [{ text: 'Gênesis 30–31', link: 'https://www.bibliaonline.com.br/nvt/gn/30' }] },
+      { day: 11, refs: [{ text: 'Gênesis 32–34', link: 'https://www.bibliaonline.com.br/nvt/gn/32' }] },
+      { day: 12, refs: [{ text: 'Gênesis 35–37', link: 'https://www.bibliaonline.com.br/nvt/gn/35' }] },
+      { day: 13, refs: [{ text: 'Gênesis 38–40', link: 'https://www.bibliaonline.com.br/nvt/gn/38' }] },
+      { day: 14, refs: [{ text: 'Gênesis 41–42', link: 'https://www.bibliaonline.com.br/nvt/gn/41' }] },
+      { day: 15, refs: [{ text: 'Gênesis 43–45', link: 'https://www.bibliaonline.com.br/nvt/gn/43' }] },
+      { day: 16, refs: [{ text: 'Gênesis 46–47', link: 'https://www.bibliaonline.com.br/nvt/gn/46' }] },
+      { day: 17, refs: [{ text: 'Gênesis 48–50', link: 'https://www.bibliaonline.com.br/nvt/gn/48' }] },
+      { day: 18, refs: [{ text: 'Êxodo 1–3', link: 'https://www.bibliaonline.com.br/nvt/ex/1' }] },
+      { day: 19, refs: [{ text: 'Êxodo 4–6', link: 'https://www.bibliaonline.com.br/nvt/ex/4' }] },
+      { day: 20, refs: [{ text: 'Êxodo 7–9', link: 'https://www.bibliaonline.com.br/nvt/ex/7' }] },
+      { day: 21, refs: [{ text: 'Êxodo 10–12', link: 'https://www.bibliaonline.com.br/nvt/ex/10' }] },
+      { day: 22, refs: [{ text: 'Êxodo 13–15', link: 'https://www.bibliaonline.com.br/nvt/ex/13' }] },
+      { day: 23, refs: [{ text: 'Êxodo 16–18', link: 'https://www.bibliaonline.com.br/nvt/ex/16' }] },
+      { day: 24, refs: [{ text: 'Êxodo 19–21', link: 'https://www.bibliaonline.com.br/nvt/ex/19' }] },
+      { day: 25, refs: [{ text: 'Êxodo 22–24', link: 'https://www.bibliaonline.com.br/nvt/ex/22' }] },
+      { day: 26, refs: [{ text: 'Êxodo 25–27', link: 'https://www.bibliaonline.com.br/nvt/ex/25' }] },
+      { day: 27, refs: [{ text: 'Êxodo 28–29', link: 'https://www.bibliaonline.com.br/nvt/ex/28' }] },
+      { day: 28, refs: [{ text: 'Êxodo 30–32', link: 'https://www.bibliaonline.com.br/nvt/ex/30' }] },
+      { day: 29, refs: [{ text: 'Êxodo 33–35', link: 'https://www.bibliaonline.com.br/nvt/ex/33' }] },
+      { day: 30, refs: [{ text: 'Êxodo 36–38', link: 'https://www.bibliaonline.com.br/nvt/ex/36' }] },
+      { day: 31, refs: [{ text: 'Êxodo 39–40', link: 'https://www.bibliaonline.com.br/nvt/ex/39' }] }
+    ],
+    "Fevereiro": [
+      { day: 1, refs: [{ text: 'Levítico 1–4', link: 'https://www.bibliaonline.com.br/nvt/lv/1' }] },
+      { day: 2, refs: [{ text: 'Levítico 5–7', link: 'https://www.bibliaonline.com.br/nvt/lv/5' }] },
+      { day: 3, refs: [{ text: 'Levítico 8–10', link: 'https://www.bibliaonline.com.br/nvt/lv/8' }] },
+      { day: 4, refs: [{ text: 'Levítico 11–13', link: 'https://www.bibliaonline.com.br/nvt/lv/11' }] },
+      { day: 5, refs: [{ text: 'Levítico 14–15', link: 'https://www.bibliaonline.com.br/nvt/lv/14' }] },
+      { day: 6, refs: [{ text: 'Levítico 16–18', link: 'https://www.bibliaonline.com.br/nvt/lv/16' }] },
+      { day: 7, refs: [{ text: 'Levítico 19–21', link: 'https://www.bibliaonline.com.br/nvt/lv/19' }] },
+      { day: 8, refs: [{ text: 'Levítico 22–23', link: 'https://www.bibliaonline.com.br/nvt/lv/22' }] },
+      { day: 9, refs: [{ text: 'Levítico 24–25', link: 'https://www.bibliaonline.com.br/nvt/lv/24' }] },
+      { day: 10, refs: [{ text: 'Levítico 26–27', link: 'https://www.bibliaonline.com.br/nvt/lv/26' }] },
+      { day: 11, refs: [{ text: 'Números 1–2', link: 'https://www.bibliaonline.com.br/nvt/nm/1' }] },
+      { day: 12, refs: [{ text: 'Números 3–4', link: 'https://www.bibliaonline.com.br/nvt/nm/3' }] },
+      { day: 13, refs: [{ text: 'Números 5–6', link: 'https://www.bibliaonline.com.br/nvt/nm/5' }] },
+      { day: 14, refs: [{ text: 'Números 7', link: 'https://www.bibliaonline.com.br/nvt/nm/7' }] },
+      { day: 15, refs: [{ text: 'Números 8–10', link: 'https://www.bibliaonline.com.br/nvt/nm/8' }] },
+      { day: 16, refs: [{ text: 'Números 11–13', link: 'https://www.bibliaonline.com.br/nvt/nm/11' }] },
+      { day: 17, refs: [{ text: 'Números 14–15', link: 'https://www.bibliaonline.com.br/nvt/nm/14' }] },
+      { day: 18, refs: [{ text: 'Números 16–17', link: 'https://www.bibliaonline.com.br/nvt/nm/16' }] },
+      { day: 19, refs: [{ text: 'Números 18–20', link: 'https://www.bibliaonline.com.br/nvt/nm/18' }] },
+      { day: 20, refs: [{ text: 'Números 21–22', link: 'https://www.bibliaonline.com.br/nvt/nm/21' }] },
+      { day: 21, refs: [{ text: 'Números 23–25', link: 'https://www.bibliaonline.com.br/nvt/nm/23' }] },
+      { day: 22, refs: [{ text: 'Números 26–27', link: 'https://www.bibliaonline.com.br/nvt/nm/26' }] },
+      { day: 23, refs: [{ text: 'Números 28–30', link: 'https://www.bibliaonline.com.br/nvt/nm/28' }] },
+      { day: 24, refs: [{ text: 'Números 31–32', link: 'https://www.bibliaonline.com.br/nvt/nm/31' }] },
+      { day: 25, refs: [{ text: 'Números 33–34', link: 'https://www.bibliaonline.com.br/nvt/nm/33' }] },
+      { day: 26, refs: [{ text: 'Números 35–36', link: 'https://www.bibliaonline.com.br/nvt/nm/35' }] },
+      { day: 27, refs: [{ text: 'Deuteronômio 1–2', link: 'https://www.bibliaonline.com.br/nvt/dt/1' }] },
+      { day: 28, refs: [{ text: 'Deuteronômio 3–4', link: 'https://www.bibliaonline.com.br/nvt/dt/3' }] }
+    ],
+    "Março": [
+      { day: 1, refs: [{ text: 'Deuteronômio 5–7', link: 'https://www.bibliaonline.com.br/nvt/dt/5' }] },
+      { day: 2, refs: [{ text: 'Deuteronômio 8–10', link: 'https://www.bibliaonline.com.br/nvt/dt/8' }] },
+      { day: 3, refs: [{ text: 'Deuteronômio 11–13', link: 'https://www.bibliaonline.com.br/nvt/dt/11' }] },
+      { day: 4, refs: [{ text: 'Deuteronômio 14–16', link: 'https://www.bibliaonline.com.br/nvt/dt/14' }] },
+      { day: 5, refs: [{ text: 'Deuteronômio 17–20', link: 'https://www.bibliaonline.com.br/nvt/dt/17' }] },
+      { day: 6, refs: [{ text: 'Deuteronômio 21–23', link: 'https://www.bibliaonline.com.br/nvt/dt/21' }] },
+      { day: 7, refs: [{ text: 'Deuteronômio 24–27', link: 'https://www.bibliaonline.com.br/nvt/dt/24' }] },
+      { day: 8, refs: [{ text: 'Deuteronômio 28–29', link: 'https://www.bibliaonline.com.br/nvt/dt/28' }] },
+      { day: 9, refs: [{ text: 'Deuteronômio 30–31', link: 'https://www.bibliaonline.com.br/nvt/dt/30' }] },
+      { day: 10, refs: [{ text: 'Deuteronômio 32–34', link: 'https://www.bibliaonline.com.br/nvt/dt/32' }] },
+      { day: 11, refs: [{ text: 'Josué 1–4', link: 'https://www.bibliaonline.com.br/nvt/js/1' }] },
+      { day: 12, refs: [{ text: 'Josué 5–8', link: 'https://www.bibliaonline.com.br/nvt/js/5' }] },
+      { day: 13, refs: [{ text: 'Josué 9–11', link: 'https://www.bibliaonline.com.br/nvt/js/9' }] },
+      { day: 14, refs: [{ text: 'Josué 12–15', link: 'https://www.bibliaonline.com.br/nvt/js/12' }] },
+      { day: 15, refs: [{ text: 'Josué 16–18', link: 'https://www.bibliaonline.com.br/nvt/js/16' }] },
+      { day: 16, refs: [{ text: 'Josué 19–21', link: 'https://www.bibliaonline.com.br/nvt/js/19' }] },
+      { day: 17, refs: [{ text: 'Josué 22–24', link: 'https://www.bibliaonline.com.br/nvt/js/22' }] },
+      { day: 18, refs: [{ text: 'Juízes 1–2', link: 'https://www.bibliaonline.com.br/nvt/jz/1' }] },
+      { day: 19, refs: [{ text: 'Juízes 3–5', link: 'https://www.bibliaonline.com.br/nvt/jz/3' }] },
+      { day: 20, refs: [{ text: 'Juízes 6–7', link: 'https://www.bibliaonline.com.br/nvt/jz/6' }] },
+      { day: 21, refs: [{ text: 'Juízes 8–9', link: 'https://www.bibliaonline.com.br/nvt/jz/8' }] },
+      { day: 22, refs: [{ text: 'Juízes 10–12', link: 'https://www.bibliaonline.com.br/nvt/jz/10' }] },
+      { day: 23, refs: [{ text: 'Juízes 13–15', link: 'https://www.bibliaonline.com.br/nvt/jz/13' }] },
+      { day: 24, refs: [{ text: 'Juízes 16–18', link: 'https://www.bibliaonline.com.br/nvt/jz/16' }] },
+      { day: 25, refs: [{ text: 'Juízes 19–21', link: 'https://www.bibliaonline.com.br/nvt/jz/19' }] },
+      { day: 26, refs: [{ text: 'Rute 1–4', link: 'https://www.bibliaonline.com.br/nvt/rt/1' }] },
+      { day: 27, refs: [{ text: '1 Samuel 1–3', link: 'https://www.bibliaonline.com.br/nvt/1sm/1' }] },
+      { day: 28, refs: [{ text: '1 Samuel 4–8', link: 'https://www.bibliaonline.com.br/nvt/1sm/4' }] },
+      { day: 29, refs: [{ text: '1 Samuel 9–12', link: 'https://www.bibliaonline.com.br/nvt/1sm/9' }] },
+      { day: 30, refs: [{ text: '1 Samuel 13–14', link: 'https://www.bibliaonline.com.br/nvt/1sm/13' }] },
+      { day: 31, refs: [{ text: '1 Samuel 15–17', link: 'https://www.bibliaonline.com.br/nvt/1sm/15' }] }
+    ],
+    "Abril": [
+      { day: 1, refs: [{ text: '1 Samuel 18–20', link: 'https://www.bibliaonline.com.br/nvt/1sm/18' }] },
+      { day: 2, refs: [{ text: '1 Samuel 21–24', link: 'https://www.bibliaonline.com.br/nvt/1sm/21' }] },
+      { day: 3, refs: [{ text: '1 Samuel 25–27', link: 'https://www.bibliaonline.com.br/nvt/1sm/25' }] },
+      { day: 4, refs: [{ text: '1 Samuel 28–31', link: 'https://www.bibliaonline.com.br/nvt/1sm/28' }] },
+      { day: 5, refs: [{ text: '2 Samuel 1–4', link: 'https://www.bibliaonline.com.br/nvt/2sm/1' }] },
+      { day: 6, refs: [{ text: '2 Samuel 5', link: 'https://www.bibliaonline.com.br/nvt/2sm/5' }] },
+      { day: 7, refs: [{ text: '2 Samuel 6–9', link: 'https://www.bibliaonline.com.br/nvt/2sm/6' }] },
+      { day: 8, refs: [{ text: '2 Samuel 10–12', link: 'https://www.bibliaonline.com.br/nvt/2sm/10' }] },
+      { day: 9, refs: [{ text: '2 Samuel 13–15', link: 'https://www.bibliaonline.com.br/nvt/2sm/13' }] },
+      { day: 10, refs: [{ text: '2 Samuel 16–18', link: 'https://www.bibliaonline.com.br/nvt/2sm/16' }] },
+      { day: 11, refs: [{ text: '2 Samuel 19–21', link: 'https://www.bibliaonline.com.br/nvt/2sm/19' }] },
+      { day: 12, refs: [{ text: '2 Samuel 22–24', link: 'https://www.bibliaonline.com.br/nvt/2sm/22' }] },
+      { day: 13, refs: [{ text: '1 Reis 1–2', link: 'https://www.bibliaonline.com.br/nvt/1rs/1' }] },
+      { day: 14, refs: [{ text: '1 Reis 3–4', link: 'https://www.bibliaonline.com.br/nvt/1rs/3' }] },
+      { day: 15, refs: [{ text: '1 Reis 5–6', link: 'https://www.bibliaonline.com.br/nvt/1rs/5' }] },
+      { day: 16, refs: [{ text: '1 Reis 7', link: 'https://www.bibliaonline.com.br/nvt/1rs/7' }] },
+      { day: 17, refs: [{ text: '1 Reis 8', link: 'https://www.bibliaonline.com.br/nvt/1rs/8' }] },
+      { day: 18, refs: [{ text: '1 Reis 9–11', link: 'https://www.bibliaonline.com.br/nvt/1rs/9' }] },
+      { day: 19, refs: [{ text: '1 Reis 12–14', link: 'https://www.bibliaonline.com.br/nvt/1rs/12' }] },
+      { day: 20, refs: [{ text: '1 Reis 15', link: 'https://www.bibliaonline.com.br/nvt/1rs/15' }] },
+      { day: 21, refs: [{ text: '1 Reis 16–17', link: 'https://www.bibliaonline.com.br/nvt/1rs/16' }] },
+      { day: 22, refs: [{ text: '1 Reis 18–19', link: 'https://www.bibliaonline.com.br/nvt/1rs/18' }] },
+      { day: 23, refs: [{ text: '1 Reis 20–21', link: 'https://www.bibliaonline.com.br/nvt/1rs/20' }] },
+      { day: 24, refs: [{ text: '1 Reis 22', link: 'https://www.bibliaonline.com.br/nvt/1rs/22' }] },
+      { day: 25, refs: [{ text: '2 Reis 1–4', link: 'https://www.bibliaonline.com.br/nvt/2rs/1' }] },
+      { day: 26, refs: [{ text: '2 Reis 5–8', link: 'https://www.bibliaonline.com.br/nvt/2rs/5' }] },
+      { day: 27, refs: [{ text: '2 Reis 9–11', link: 'https://www.bibliaonline.com.br/nvt/2rs/9' }] },
+      { day: 28, refs: [{ text: '2 Reis 12–13', link: 'https://www.bibliaonline.com.br/nvt/2rs/12' }] },
+      { day: 29, refs: [{ text: '2 Reis 14–15', link: 'https://www.bibliaonline.com.br/nvt/2rs/14' }] },
+      { day: 30, refs: [{ text: '2 Reis 16–17', link: 'https://www.bibliaonline.com.br/nvt/2rs/16' }] }
+    ],
+    "Maio": [
+      { day: 1, refs: [{ text: '2 Reis 18', link: 'https://www.bibliaonline.com.br/nvt/2rs/18' }] },
+      { day: 2, refs: [{ text: '2 Reis 19', link: 'https://www.bibliaonline.com.br/nvt/2rs/19' }] },
+      { day: 3, refs: [{ text: '2 Reis 20–22', link: 'https://www.bibliaonline.com.br/nvt/2rs/20' }] },
+      { day: 4, refs: [{ text: '2 Reis 23–25', link: 'https://www.bibliaonline.com.br/nvt/2rs/23' }] },
+      { day: 5, refs: [{ text: '1 Crônicas 1–2', link: 'https://www.bibliaonline.com.br/nvt/1cr/1' }] },
+      { day: 6, refs: [{ text: '1 Crônicas 3–5', link: 'https://www.bibliaonline.com.br/nvt/1cr/3' }] },
+      { day: 7, refs: [{ text: '1 Crônicas 6', link: 'https://www.bibliaonline.com.br/nvt/1cr/6' }] },
+      { day: 8, refs: [{ text: '1 Crônicas 7–10', link: 'https://www.bibliaonline.com.br/nvt/1cr/7' }] },
+      { day: 9, refs: [{ text: '1 Crônicas 11–12', link: 'https://www.bibliaonline.com.br/nvt/1cr/11' }] },
+      { day: 10, refs: [{ text: '1 Crônicas 13–16', link: 'https://www.bibliaonline.com.br/nvt/1cr/13' }] },
+      { day: 11, refs: [{ text: '1 Crônicas 17–19', link: 'https://www.bibliaonline.com.br/nvt/1cr/17' }] },
+      { day: 12, refs: [{ text: '1 Crônicas 20–22', link: 'https://www.bibliaonline.com.br/nvt/1cr/20' }] },
+      { day: 13, refs: [{ text: '1 Crônicas 23–25', link: 'https://www.bibliaonline.com.br/nvt/1cr/23' }] },
+      { day: 14, refs: [{ text: '1 Crônicas 26–29', link: 'https://www.bibliaonline.com.br/nvt/1cr/26' }] },
+      { day: 15, refs: [{ text: '2 Crônicas 1–4', link: 'https://www.bibliaonline.com.br/nvt/2cr/1' }] },
+      { day: 16, refs: [{ text: '2 Crônicas 5–7', link: 'https://www.bibliaonline.com.br/nvt/2cr/5' }] },
+      { day: 17, refs: [{ text: '2 Crônicas 8–10', link: 'https://www.bibliaonline.com.br/nvt/2cr/8' }] },
+      { day: 18, refs: [{ text: '2 Crônicas 11–13', link: 'https://www.bibliaonline.com.br/nvt/2cr/11' }] },
+      { day: 19, refs: [{ text: '2 Crônicas 14–17', link: 'https://www.bibliaonline.com.br/nvt/2cr/14' }] },
+      { day: 20, refs: [{ text: '2 Crônicas 18–20', link: 'https://www.bibliaonline.com.br/nvt/2cr/18' }] },
+      { day: 21, refs: [{ text: '2 Crônicas 21–23', link: 'https://www.bibliaonline.com.br/nvt/2cr/21' }] },
+      { day: 22, refs: [{ text: '2 Crônicas 24–26', link: 'https://www.bibliaonline.com.br/nvt/2cr/24' }] },
+      { day: 23, refs: [{ text: '2 Crônicas 27–30', link: 'https://www.bibliaonline.com.br/nvt/2cr/27' }] },
+      { day: 24, refs: [{ text: '2 Crônicas 31–33', link: 'https://www.bibliaonline.com.br/nvt/2cr/31' }] },
+      { day: 25, refs: [{ text: '2 Crônicas 34–36', link: 'https://www.bibliaonline.com.br/nvt/2cr/34' }] },
+      { day: 26, refs: [{ text: 'Esdras 1–4', link: 'https://www.bibliaonline.com.br/nvt/ed/1' }] },
+      { day: 27, refs: [{ text: 'Esdras 5–7', link: 'https://www.bibliaonline.com.br/nvt/ed/5' }] },
+      { day: 28, refs: [{ text: 'Esdras 8–10', link: 'https://www.bibliaonline.com.br/nvt/ed/8' }] },
+      { day: 29, refs: [{ text: 'Neemias 1–4', link: 'https://www.bibliaonline.com.br/nvt/ne/1' }] },
+      { day: 30, refs: [{ text: 'Salmos 119:1–88', link: 'https://www.bibliaonline.com.br/nvt/sl/119/1' }] },
+      { day: 31, refs: [{ text: 'Salmos 119:89–176', link: 'https://www.bibliaonline.com.br/nvt/sl/119/89' }] }
+    ],
+    "Junho": [
+      { day: 1, refs: [{ text: 'Neemias 5–8', link: 'https://www.bibliaonline.com.br/nvt/ne/5' }] },
+      { day: 2, refs: [{ text: 'Neemias 9–11', link: 'https://www.bibliaonline.com.br/nvt/ne/9' }] },
+      { day: 3, refs: [{ text: 'Neemias 12–13', link: 'https://www.bibliaonline.com.br/nvt/ne/12' }] },
+      { day: 4, refs: [{ text: 'Ester 1–5', link: 'https://www.bibliaonline.com.br/nvt/est/1' }] },
+      { day: 5, refs: [{ text: 'Ester 6–10', link: 'https://www.bibliaonline.com.br/nvt/est/6' }] },
+      { day: 6, refs: [{ text: 'Jó 1–5', link: 'https://www.bibliaonline.com.br/nvt/jo/1' }] },
+      { day: 7, refs: [{ text: 'Jó 6–9', link: 'https://www.bibliaonline.com.br/nvt/jo/6' }] },
+      { day: 8, refs: [{ text: 'Jó 10–13', link: 'https://www.bibliaonline.com.br/nvt/jo/10' }] },
+      { day: 9, refs: [{ text: 'Jó 14–16', link: 'https://www.bibliaonline.com.br/nvt/jo/14' }] },
+      { day: 10, refs: [{ text: 'Jó 17–20', link: 'https://www.bibliaonline.com.br/nvt/jo/17' }] },
+      { day: 11, refs: [{ text: 'Jó 21–23', link: 'https://www.bibliaonline.com.br/nvt/jo/21' }] },
+      { day: 12, refs: [{ text: 'Jó 24–28', link: 'https://www.bibliaonline.com.br/nvt/jo/24' }] },
+      { day: 13, refs: [{ text: 'Jó 29–31', link: 'https://www.bibliaonline.com.br/nvt/jo/29' }] },
+      { day: 14, refs: [{ text: 'Jó 32–34', link: 'https://www.bibliaonline.com.br/nvt/jo/32' }] },
+      { day: 15, refs: [{ text: 'Jó 35–37', link: 'https://www.bibliaonline.com.br/nvt/jo/35' }] },
+      { day: 16, refs: [{ text: 'Jó 38–39', link: 'https://www.bibliaonline.com.br/nvt/jo/38' }] },
+      { day: 17, refs: [{ text: 'Jó 40–42', link: 'https://www.bibliaonline.com.br/nvt/jo/40' }] },
+      { day: 18, refs: [{ text: 'Salmos 1–10', link: 'https://www.bibliaonline.com.br/nvt/sl/1' }] },
+      { day: 19, refs: [{ text: 'Salmos 11–21', link: 'https://www.bibliaonline.com.br/nvt/sl/11' }] },
+      { day: 20, refs: [{ text: 'Salmos 22–31', link: 'https://www.bibliaonline.com.br/nvt/sl/22' }] },
+      { day: 21, refs: [{ text: 'Salmos 32–41', link: 'https://www.bibliaonline.com.br/nvt/sl/32' }] },
+      { day: 22, refs: [{ text: 'Salmos 42–51', link: 'https://www.bibliaonline.com.br/nvt/sl/42' }] },
+      { day: 23, refs: [{ text: 'Salmos 52–61', link: 'https://www.bibliaonline.com.br/nvt/sl/52' }] },
+      { day: 24, refs: [{ text: 'Salmos 62–71', link: 'https://www.bibliaonline.com.br/nvt/sl/62' }] },
+      { day: 25, refs: [{ text: 'Salmos 72–81', link: 'https://www.bibliaonline.com.br/nvt/sl/72' }] },
+      { day: 26, refs: [{ text: 'Salmos 82–91', link: 'https://www.bibliaonline.com.br/nvt/sl/82' }] },
+      { day: 27, refs: [{ text: 'Salmos 92–101', link: 'https://www.bibliaonline.com.br/nvt/sl/92' }] },
+      { day: 28, refs: [{ text: 'Salmos 102–111', link: 'https://www.bibliaonline.com.br/nvt/sl/102' }] },
+      { day: 29, refs: [{ text: 'Salmos 112–118', link: 'https://www.bibliaonline.com.br/nvt/sl/112' }] },
+      { day: 30, refs: [{ text: 'Salmos 120–135', link: 'https://www.bibliaonline.com.br/nvt/sl/120' }] }
+    ],
+    "Julho": [
+      { day: 1, refs: [{ text: 'Salmos 136–150', link: 'https://www.bibliaonline.com.br/nvt/sl/136' }] },
+      { day: 2, refs: [{ text: 'Provérbios 1–3', link: 'https://www.bibliaonline.com.br/nvt/pv/1' }] },
+      { day: 3, refs: [{ text: 'Provérbios 4–6', link: 'https://www.bibliaonline.com.br/nvt/pv/4' }] },
+      { day: 4, refs: [{ text: 'Provérbios 7–9', link: 'https://www.bibliaonline.com.br/nvt/pv/7' }] },
+      { day: 5, refs: [{ text: 'Provérbios 10–12', link: 'https://www.bibliaonline.com.br/nvt/pv/10' }] },
+      { day: 6, refs: [{ text: 'Provérbios 13–15', link: 'https://www.bibliaonline.com.br/nvt/pv/13' }] },
+      { day: 7, refs: [{ text: 'Provérbios 16–18', link: 'https://www.bibliaonline.com.br/nvt/pv/16' }] },
+      { day: 8, refs: [{ text: 'Provérbios 19–21', link: 'https://www.bibliaonline.com.br/nvt/pv/19' }] },
+      { day: 9, refs: [{ text: 'Provérbios 22–24', link: 'https://www.bibliaonline.com.br/nvt/pv/22' }] },
+      { day: 10, refs: [{ text: 'Provérbios 25–27', link: 'https://www.bibliaonline.com.br/nvt/pv/25' }] },
+      { day: 11, refs: [{ text: 'Provérbios 28–31', link: 'https://www.bibliaonline.com.br/nvt/pv/28' }] },
+      { day: 12, refs: [{ text: 'Eclesiastes 1–6', link: 'https://www.bibliaonline.com.br/nvt/ec/1' }] },
+      { day: 13, refs: [{ text: 'Eclesiastes 7–12', link: 'https://www.bibliaonline.com.br/nvt/ec/7' }] },
+      { day: 14, refs: [{ text: 'Cantares 1–8', link: 'https://www.bibliaonline.com.br/nvt/ct/1' }] },
+      { day: 15, refs: [{ text: 'Isaías 1–4', link: 'https://www.bibliaonline.com.br/nvt/is/1' }] },
+      { day: 16, refs: [{ text: 'Isaías 5–8', link: 'https://www.bibliaonline.com.br/nvt/is/5' }] },
+      { day: 17, refs: [{ text: 'Isaías 9–12', link: 'https://www.bibliaonline.com.br/nvt/is/9' }] },
+      { day: 18, refs: [{ text: 'Isaías 13–17', link: 'https://www.bibliaonline.com.br/nvt/is/13' }] },
+      { day: 19, refs: [{ text: 'Isaías 18–22', link: 'https://www.bibliaonline.com.br/nvt/is/18' }] },
+      { day: 20, refs: [{ text: 'Isaías 23–27', link: 'https://www.bibliaonline.com.br/nvt/is/23' }] },
+      { day: 21, refs: [{ text: 'Isaías 28–30', link: 'https://www.bibliaonline.com.br/nvt/is/28' }] },
+      { day: 22, refs: [{ text: 'Isaías 31–34', link: 'https://www.bibliaonline.com.br/nvt/is/31' }] },
+      { day: 23, refs: [{ text: 'Isaías 35–37', link: 'https://www.bibliaonline.com.br/nvt/is/35' }] },
+      { day: 24, refs: [{ text: 'Isaías 38–40', link: 'https://www.bibliaonline.com.br/nvt/is/38' }] },
+      { day: 25, refs: [{ text: 'Isaías 41–44', link: 'https://www.bibliaonline.com.br/nvt/is/41' }] },
+      { day: 26, refs: [{ text: 'Isaías 45–48', link: 'https://www.bibliaonline.com.br/nvt/is/45' }] },
+      { day: 27, refs: [{ text: 'Isaías 49–52', link: 'https://www.bibliaonline.com.br/nvt/is/49' }] },
+      { day: 28, refs: [{ text: 'Isaías 53–56', link: 'https://www.bibliaonline.com.br/nvt/is/53' }] },
+      { day: 29, refs: [{ text: 'Isaías 57–60', link: 'https://www.bibliaonline.com.br/nvt/is/57' }] },
+      { day: 30, refs: [{ text: 'Isaías 61–63', link: 'https://www.bibliaonline.com.br/nvt/is/61' }] },
+      { day: 31, refs: [{ text: 'Isaías 64–66', link: 'https://www.bibliaonline.com.br/nvt/is/64' }] }
+    ],
+    "Agosto": [
+      { day: 1, refs: [{ text: 'Jeremias 1–3', link: 'https://www.bibliaonline.com.br/nvt/jr/1' }] },
+      { day: 2, refs: [{ text: 'Jeremias 4–6', link: 'https://www.bibliaonline.com.br/nvt/jr/4' }] },
+      { day: 3, refs: [{ text: 'Jeremias 7–9', link: 'https://www.bibliaonline.com.br/nvt/jr/7' }] },
+      { day: 4, refs: [{ text: 'Jeremias 10–13', link: 'https://www.bibliaonline.com.br/nvt/jr/10' }] },
+      { day: 5, refs: [{ text: 'Jeremias 14–17', link: 'https://www.bibliaonline.com.br/nvt/jr/14' }] },
+      { day: 6, refs: [{ text: 'Jeremias 18–22', link: 'https://www.bibliaonline.com.br/nvt/jr/18' }] },
+      { day: 7, refs: [{ text: 'Jeremias 23–25', link: 'https://www.bibliaonline.com.br/nvt/jr/23' }] },
+      { day: 8, refs: [{ text: 'Jeremias 26–29', link: 'https://www.bibliaonline.com.br/nvt/jr/26' }] },
+      { day: 9, refs: [{ text: 'Jeremias 30–31', link: 'https://www.bibliaonline.com.br/nvt/jr/30' }] },
+      { day: 10, refs: [{ text: 'Jeremias 32–34', link: 'https://www.bibliaonline.com.br/nvt/jr/32' }] },
+      { day: 11, refs: [{ text: 'Jeremias 35–37', link: 'https://www.bibliaonline.com.br/nvt/jr/35' }] },
+      { day: 12, refs: [{ text: 'Jeremias 38–40', link: 'https://www.bibliaonline.com.br/nvt/jr/38' }] },
+      { day: 13, refs: [{ text: 'Jeremias 41–45', link: 'https://www.bibliaonline.com.br/nvt/jr/41' }] },
+      { day: 14, refs: [{ text: 'Jeremias 46–48', link: 'https://www.bibliaonline.com.br/nvt/jr/46' }] },
+      { day: 15, refs: [{ text: 'Jeremias 49–50', link: 'https://www.bibliaonline.com.br/nvt/jr/49' }] },
+      { day: 16, refs: [{ text: 'Jeremias 51–52', link: 'https://www.bibliaonline.com.br/nvt/jr/51' }] },
+      { day: 17, refs: [{ text: 'Lamentações 1–2', link: 'https://www.bibliaonline.com.br/nvt/lm/1' }] },
+      { day: 18, refs: [{ text: 'Lamentações 3–5', link: 'https://www.bibliaonline.com.br/nvt/lm/3' }] },
+      { day: 19, refs: [{ text: 'Ezequiel 1–4', link: 'https://www.bibliaonline.com.br/nvt/ez/1' }] },
+      { day: 20, refs: [{ text: 'Ezequiel 5–8', link: 'https://www.bibliaonline.com.br/nvt/ez/5' }] },
+      { day: 21, refs: [{ text: 'Ezequiel 9–12', link: 'https://www.bibliaonline.com.br/nvt/ez/9' }] },
+      { day: 22, refs: [{ text: 'Ezequiel 13–15', link: 'https://www.bibliaonline.com.br/nvt/ez/13' }] },
+      { day: 23, refs: [{ text: 'Ezequiel 16–17', link: 'https://www.bibliaonline.com.br/nvt/ez/16' }] },
+      { day: 24, refs: [{ text: 'Ezequiel 18–19', link: 'https://www.bibliaonline.com.br/nvt/ez/18' }] },
+      { day: 25, refs: [{ text: 'Ezequiel 20–21', link: 'https://www.bibliaonline.com.br/nvt/ez/20' }] },
+      { day: 26, refs: [{ text: 'Ezequiel 22–23', link: 'https://www.bibliaonline.com.br/nvt/ez/22' }] },
+      { day: 27, refs: [{ text: 'Ezequiel 24–27', link: 'https://www.bibliaonline.com.br/nvt/ez/24' }] },
+      { day: 28, refs: [{ text: 'Ezequiel 28–31', link: 'https://www.bibliaonline.com.br/nvt/ez/28' }] },
+      { day: 29, refs: [{ text: 'Ezequiel 32–34', link: 'https://www.bibliaonline.com.br/nvt/ez/32' }] },
+      { day: 30, refs: [{ text: 'Ezequiel 35–37', link: 'https://www.bibliaonline.com.br/nvt/ez/35' }] },
+      { day: 31, refs: [{ text: 'Ezequiel 38–39', link: 'https://www.bibliaonline.com.br/nvt/ez/38' }] }
+    ],
+    "Setembro": [
+      { day: 1, refs: [{ text: 'Ezequiel 40–41', link: 'https://www.bibliaonline.com.br/nvt/ez/40' }] },
+      { day: 2, refs: [{ text: 'Ezequiel 42–43', link: 'https://www.bibliaonline.com.br/nvt/ez/42' }] },
+      { day: 3, refs: [{ text: 'Ezequiel 44–45', link: 'https://www.bibliaonline.com.br/nvt/ez/44' }] },
+      { day: 4, refs: [{ text: 'Ezequiel 46–48', link: 'https://www.bibliaonline.com.br/nvt/ez/46' }] },
+      { day: 5, refs: [{ text: 'Daniel 1–3', link: 'https://www.bibliaonline.com.br/nvt/dn/1' }] },
+      { day: 6, refs: [{ text: 'Daniel 4–6', link: 'https://www.bibliaonline.com.br/nvt/dn/4' }] },
+      { day: 7, refs: [{ text: 'Daniel 7–9', link: 'https://www.bibliaonline.com.br/nvt/dn/7' }] },
+      { day: 8, refs: [{ text: 'Daniel 10–12', link: 'https://www.bibliaonline.com.br/nvt/dn/10' }] },
+      { day: 9, refs: [{ text: 'Oséias 1–7', link: 'https://www.bibliaonline.com.br/nvt/os/1' }] },
+      { day: 10, refs: [{ text: 'Oséias 8–14', link: 'https://www.bibliaonline.com.br/nvt/os/8' }] },
+      { day: 11, refs: [{ text: 'Joel 1–3', link: 'https://www.bibliaonline.com.br/nvt/jl/1' }] },
+      { day: 12, refs: [{ text: 'Amós 1–5', link: 'https://www.bibliaonline.com.br/nvt/am/1' }] },
+      { day: 13, refs: [{ text: 'Amós 6–9', link: 'https://www.bibliaonline.com.br/nvt/am/6' }] },
+      { day: 14, refs: [{ text: 'Obadias 1', link: 'https://www.bibliaonline.com.br/nvt/ob/1' }] },
+      { day: 15, refs: [{ text: 'Jonas 1–4', link: 'https://www.bibliaonline.com.br/nvt/jn/1' }] },
+      { day: 16, refs: [{ text: 'Miquéias 1–7', link: 'https://www.bibliaonline.com.br/nvt/mq/1' }] },
+      { day: 17, refs: [{ text: 'Naum 1–3', link: 'https://www.bibliaonline.com.br/nvt/na/1' }] },
+      { day: 18, refs: [{ text: 'Habacuque 1–3', link: 'https://www.bibliaonline.com.br/nvt/hc/1' }] },
+      { day: 19, refs: [{ text: 'Sofonias 1–3', link: 'https://www.bibliaonline.com.br/nvt/sf/1' }] },
+      { day: 20, refs: [{ text: 'Ageu 1–2', link: 'https://www.bibliaonline.com.br/nvt/ag/1' }] },
+      { day: 21, refs: [{ text: 'Zacarias 1–7', link: 'https://www.bibliaonline.com.br/nvt/zc/1' }] },
+      { day: 22, refs: [{ text: 'Zacarias 8–14', link: 'https://www.bibliaonline.com.br/nvt/zc/8' }] },
+      { day: 23, refs: [{ text: 'Malaquias 1–4', link: 'https://www.bibliaonline.com.br/nvt/ml/1' }] },
+      { day: 24, refs: [{ text: 'Mateus 1', link: 'https://www.bibliaonline.com.br/nvt/mt/1' }] },
+      { day: 25, refs: [{ text: 'Mateus 2', link: 'https://www.bibliaonline.com.br/nvt/mt/2' }] },
+      { day: 26, refs: [{ text: 'Mateus 3–4', link: 'https://www.bibliaonline.com.br/nvt/mt/3' }] },
+      { day: 27, refs: [{ text: 'Mateus 5–7', link: 'https://www.bibliaonline.com.br/nvt/mt/5' }] },
+      { day: 28, refs: [{ text: 'Mateus 8', link: 'https://www.bibliaonline.com.br/nvt/mt/8' }] },
+      { day: 29, refs: [{ text: 'Mateus 9–10', link: 'https://www.bibliaonline.com.br/nvt/mt/9' }] },
+      { day: 30, refs: [{ text: 'Mateus 11–12', link: 'https://www.bibliaonline.com.br/nvt/mt/11' }] }
+    ],
+    "Outubro": [
+      { day: 1, refs: [{ text: 'Mateus 13', link: 'https://www.bibliaonline.com.br/nvt/mt/13' }] },
+      { day: 2, refs: [{ text: 'Mateus 14–15', link: 'https://www.bibliaonline.com.br/nvt/mt/14' }] },
+      { day: 3, refs: [{ text: 'Mateus 16–18', link: 'https://www.bibliaonline.com.br/nvt/mt/16' }] },
+      { day: 4, refs: [{ text: 'Mateus 19–21', link: 'https://www.bibliaonline.com.br/nvt/mt/19' }] },
+      { day: 5, refs: [{ text: 'Mateus 22–23', link: 'https://www.bibliaonline.com.br/nvt/mt/22' }] },
+      { day: 6, refs: [{ text: 'Mateus 24–25', link: 'https://www.bibliaonline.com.br/nvt/mt/24' }] },
+      { day: 7, refs: [{ text: 'Mateus 26', link: 'https://www.bibliaonline.com.br/nvt/mt/26' }] },
+      { day: 8, refs: [{ text: 'Mateus 27–28', link: 'https://www.bibliaonline.com.br/nvt/mt/27' }] },
+      { day: 9, refs: [{ text: 'Marcos 1–3', link: 'https://www.bibliaonline.com.br/nvt/mc/1' }] },
+      { day: 10, refs: [{ text: 'Marcos 4–5', link: 'https://www.bibliaonline.com.br/nvt/mc/4' }] },
+      { day: 11, refs: [{ text: 'Marcos 6–8', link: 'https://www.bibliaonline.com.br/nvt/mc/6' }] },
+      { day: 12, refs: [{ text: 'Marcos 9–10', link: 'https://www.bibliaonline.com.br/nvt/mc/9' }] },
+      { day: 13, refs: [{ text: 'Marcos 11–12', link: 'https://www.bibliaonline.com.br/nvt/mc/11' }] },
+      { day: 14, refs: [{ text: 'Marcos 13–14', link: 'https://www.bibliaonline.com.br/nvt/mc/13' }] },
+      { day: 15, refs: [{ text: 'Marcos 15–16', link: 'https://www.bibliaonline.com.br/nvt/mc/15' }] },
+      { day: 16, refs: [{ text: 'Lucas 1', link: 'https://www.bibliaonline.com.br/nvt/lc/1' }] },
+      { day: 17, refs: [{ text: 'Lucas 2', link: 'https://www.bibliaonline.com.br/nvt/lc/2' }] },
+      { day: 18, refs: [{ text: 'Lucas 3–4', link: 'https://www.bibliaonline.com.br/nvt/lc/3' }] },
+      { day: 19, refs: [{ text: 'Lucas 5–6', link: 'https://www.bibliaonline.com.br/nvt/lc/5' }] },
+      { day: 20, refs: [{ text: 'Lucas 7–8', link: 'https://www.bibliaonline.com.br/nvt/lc/7' }] },
+      { day: 21, refs: [{ text: 'Lucas 9', link: 'https://www.bibliaonline.com.br/nvt/lc/9' }] },
+      { day: 22, refs: [{ text: 'Lucas 10–11', link: 'https://www.bibliaonline.com.br/nvt/lc/10' }] },
+      { day: 23, refs: [{ text: 'Lucas 12–13', link: 'https://www.bibliaonline.com.br/nvt/lc/12' }] },
+      { day: 24, refs: [{ text: 'Lucas 14–15', link: 'https://www.bibliaonline.com.br/nvt/lc/14' }] },
+      { day: 25, refs: [{ text: 'Lucas 16–17', link: 'https://www.bibliaonline.com.br/nvt/lc/16' }] },
+      { day: 26, refs: [{ text: 'Lucas 18–19', link: 'https://www.bibliaonline.com.br/nvt/lc/18' }] },
+      { day: 27, refs: [{ text: 'Lucas 20–21', link: 'https://www.bibliaonline.com.br/nvt/lc/20' }] },
+      { day: 28, refs: [{ text: 'Lucas 22', link: 'https://www.bibliaonline.com.br/nvt/lc/22' }] },
+      { day: 29, refs: [{ text: 'Lucas 23–24', link: 'https://www.bibliaonline.com.br/nvt/lc/23' }] },
+      { day: 30, refs: [{ text: 'João 1–3', link: 'https://www.bibliaonline.com.br/nvt/jo/1' }] },
+      { day: 31, refs: [{ text: 'João 4–5', link: 'https://www.bibliaonline.com.br/nvt/jo/4' }] }
+    ],
+    "Novembro": [
+      { day: 1, refs: [{ text: 'João 6', link: 'https://www.bibliaonline.com.br/nvt/jo/6' }] },
+      { day: 2, refs: [{ text: 'João 7–8', link: 'https://www.bibliaonline.com.br/nvt/jo/7' }] },
+      { day: 3, refs: [{ text: 'João 9–10', link: 'https://www.bibliaonline.com.br/nvt/jo/9' }] },
+      { day: 4, refs: [{ text: 'João 11–12', link: 'https://www.bibliaonline.com.br/nvt/jo/11' }] },
+      { day: 5, refs: [{ text: 'João 13–17', link: 'https://www.bibliaonline.com.br/nvt/jo/13' }] },
+      { day: 6, refs: [{ text: 'João 18–19', link: 'https://www.bibliaonline.com.br/nvt/jo/18' }] },
+      { day: 7, refs: [{ text: 'João 20–21', link: 'https://www.bibliaonline.com.br/nvt/jo/20' }] },
+      { day: 8, refs: [{ text: 'Atos 1–3', link: 'https://www.bibliaonline.com.br/nvt/at/1' }] },
+      { day: 9, refs: [{ text: 'Atos 4–6', link: 'https://www.bibliaonline.com.br/nvt/at/4' }] },
+      { day: 10, refs: [{ text: 'Atos 7–8', link: 'https://www.bibliaonline.com.br/nvt/at/7' }] },
+      { day: 11, refs: [{ text: 'Atos 9–10', link: 'https://www.bibliaonline.com.br/nvt/at/9' }] },
+      { day: 12, refs: [{ text: 'Atos 11–12', link: 'https://www.bibliaonline.com.br/nvt/at/11' }] },
+      { day: 13, refs: [{ text: 'Atos 13–14', link: 'https://www.bibliaonline.com.br/nvt/at/13' }] },
+      { day: 14, refs: [{ text: 'Atos 15–16', link: 'https://www.bibliaonline.com.br/nvt/at/15' }] },
+      { day: 15, refs: [{ text: 'Atos 17–18', link: 'https://www.bibliaonline.com.br/nvt/at/17' }] },
+      { day: 16, refs: [{ text: 'Atos 19–20', link: 'https://www.bibliaonline.com.br/nvt/at/19' }] },
+      { day: 17, refs: [{ text: 'Atos 21–23', link: 'https://www.bibliaonline.com.br/nvt/at/21' }] },
+      { day: 18, refs: [{ text: 'Atos 24–26', link: 'https://www.bibliaonline.com.br/nvt/at/24' }] },
+      { day: 19, refs: [{ text: 'Atos 27–28', link: 'https://www.bibliaonline.com.br/nvt/at/27' }] },
+      { day: 20, refs: [{ text: 'Romanos 1–3', link: 'https://www.bibliaonline.com.br/nvt/rm/1' }] },
+      { day: 21, refs: [{ text: 'Romanos 4–7', link: 'https://www.bibliaonline.com.br/nvt/rm/4' }] },
+      { day: 22, refs: [{ text: 'Romanos 8–10', link: 'https://www.bibliaonline.com.br/nvt/rm/8' }] },
+      { day: 23, refs: [{ text: 'Romanos 11–13', link: 'https://www.bibliaonline.com.br/nvt/rm/11' }] },
+      { day: 24, refs: [{ text: 'Romanos 14–16', link: 'https://www.bibliaonline.com.br/nvt/rm/14' }] },
+      { day: 25, refs: [{ text: '1 Coríntios 1–4', link: 'https://www.bibliaonline.com.br/nvt/1co/1' }] },
+      { day: 26, refs: [{ text: '1 Coríntios 5–8', link: 'https://www.bibliaonline.com.br/nvt/1co/5' }] },
+      { day: 27, refs: [{ text: '1 Coríntios 9–11', link: 'https://www.bibliaonline.com.br/nvt/1co/9' }] },
+      { day: 28, refs: [{ text: '1 Coríntios 12–14', link: 'https://www.bibliaonline.com.br/nvt/1co/12' }] },
+      { day: 29, refs: [{ text: '1 Coríntios 15–16', link: 'https://www.bibliaonline.com.br/nvt/1co/15' }] },
+      { day: 30, refs: [{ text: '2 Coríntios 1–4', link: 'https://www.bibliaonline.com.br/nvt/2co/1' }] }
+    ],
+    "Dezembro": [
+      { day: 1, refs: [{ text: '2 Coríntios 5–9', link: 'https://www.bibliaonline.com.br/nvt/2co/5' }] },
+      { day: 2, refs: [{ text: '2 Coríntios 10–13', link: 'https://www.bibliaonline.com.br/nvt/2co/10' }] },
+      { day: 3, refs: [{ text: 'Gálatas 1–6', link: 'https://www.bibliaonline.com.br/nvt/gl/1' }] },
+      { day: 4, refs: [{ text: 'Efésios 1–6', link: 'https://www.bibliaonline.com.br/nvt/ef/1' }] },
+      { day: 5, refs: [{ text: 'Filipenses 1–4', link: 'https://www.bibliaonline.com.br/nvt/fl/1' }] },
+      { day: 6, refs: [{ text: 'Colossenses 1–4', link: 'https://www.bibliaonline.com.br/nvt/cl/1' }] },
+      { day: 7, refs: [{ text: '1Ts 1–5 e 2Ts 1–3', link: 'https://www.bibliaonline.com.br/nvt/1ts/1' }] },
+      { day: 8, refs: [{ text: '1 Timóteo 1–6', link: 'https://www.bibliaonline.com.br/nvt/1tm/1' }] },
+      { day: 9, refs: [{ text: '2 Timóteo 1–4', link: 'https://www.bibliaonline.com.br/nvt/2tm/1' }] },
+      { day: 10, refs: [{ text: 'Tito 1–3 e Filemon 1', link: 'https://www.bibliaonline.com.br/nvt/tt/1' }] },
+      { day: 11, refs: [{ text: 'Hebreus 1–6', link: 'https://www.bibliaonline.com.br/nvt/hb/1' }] },
+      { day: 12, refs: [{ text: 'Hebreus 7–10', link: 'https://www.bibliaonline.com.br/nvt/hb/7' }] },
+      { day: 13, refs: [{ text: 'Hebreus 11–13', link: 'https://www.bibliaonline.com.br/nvt/hb/11' }] },
+      { day: 14, refs: [{ text: 'Tiago 1–5', link: 'https://www.bibliaonline.com.br/nvt/tg/1' }] },
+      { day: 15, refs: [{ text: '1 Pedro 1–5', link: 'https://www.bibliaonline.com.br/nvt/1pe/1' }] },
+      { day: 16, refs: [{ text: '2 Pedro 1–3', link: 'https://www.bibliaonline.com.br/nvt/2pe/1' }] },
+      { day: 17, refs: [{ text: '1 João 1–5', link: 'https://www.bibliaonline.com.br/nvt/1jo/1' }] },
+      { day: 18, refs: [{ text: '2Jo 1, 3Jo 1 e Judas 1', link: 'https://www.bibliaonline.com.br/nvt/2jo/1' }] },
+      { day: 19, refs: [{ text: 'Apocalipse 1–3', link: 'https://www.bibliaonline.com.br/nvt/ap/1' }] },
+      { day: 20, refs: [{ text: 'Apocalipse 4–6', link: 'https://www.bibliaonline.com.br/nvt/ap/4' }] },
+      { day: 21, refs: [{ text: 'Apocalipse 7–9', link: 'https://www.bibliaonline.com.br/nvt/ap/7' }] },
+      { day: 22, refs: [{ text: 'Apocalipse 10–12', link: 'https://www.bibliaonline.com.br/nvt/ap/10' }] },
+      { day: 23, refs: [{ text: 'Apocalipse 13–15', link: 'https://www.bibliaonline.com.br/nvt/ap/13' }] },
+      { day: 24, refs: [{ text: 'Apocalipse 16–18', link: 'https://www.bibliaonline.com.br/nvt/ap/16' }] },
+      { day: 25, refs: [{ text: 'Apocalipse 19–20', link: 'https://www.bibliaonline.com.br/nvt/ap/19' }] },
+      { day: 26, refs: [{ text: 'Apocalipse 21–22', link: 'https://www.bibliaonline.com.br/nvt/ap/21' }] },
+      { day: 27, refs: [{ text: 'Reflexão e Oração', link: 'https://www.bibliaonline.com.br/' }] },
+      { day: 28, refs: [{ text: 'Reflexão e Oração', link: 'https://www.bibliaonline.com.br/' }] },
+      { day: 29, refs: [{ text: 'Reflexão e Oração', link: 'https://www.bibliaonline.com.br/' }] },
+      { day: 30, refs: [{ text: 'Reflexão e Oração', link: 'https://www.bibliaonline.com.br/' }] },
+      { day: 31, refs: [{ text: 'Finalização do Plano', link: 'https://www.bibliaonline.com.br/' }] }
+    ]
+  };
 
-    const stripAccents = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-    const normMonthId = (rawId) => { 
-      const s = String(rawId||'mes').toLowerCase().trim(); 
-      const stripped = stripAccents(s); 
-      for(const m of MONTHS_PT) {
-        if(stripAccents(m.toLowerCase()) === stripped) return m;
-      }
-      return rawId || 'mes';
-    };
-    const normHref = (url) => {
-      try {
-        const u = new URL(url, location.origin);
-        const params = new URLSearchParams(u.search);
-        for (const k of Array.from(params.keys())) {
-          if (/^utm_|^fbclid$|^gclid$|^_hs/i.test(k)) params.delete(k);
-        }
-        const q = params.toString();
-        return (u.pathname + (q ? ('?'+q) : '')).toLowerCase();
-      } catch {
-        return String(url).toLowerCase();
-      }
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyB8VTml_2O1NqPCAZyo0ikEoEce-DHfc-s",
+    authDomain: "plano-leitura2025.firebaseapp.com",
+    projectId: "plano-leitura2025",
+    storageBucket: "plano-leitura2025.firebasestorage.app",
+    messagingSenderId: "382236825915",
+    appId: "1:382236825915:web:b63475cf14b3080abc7f1e"
+  };
 
-    // Utilitários de Persistência Local (LocalStorage)
-    const kLocal = (mesId, hrefKey) => `${LS_PREFIX}${normMonthId(mesId)}:${hrefKey}:${YEAR}`;
-    const getLocal = (mesId, href) => { 
-      try { 
-        return localStorage.getItem(kLocal(mesId, normHref(href))) === "1"; 
-      } catch { 
-        return false; 
-      } 
-    };
-    const setLocal = (mesId, href, checked) => { 
-      try { 
-        const key = kLocal(mesId, normHref(href));
-        checked ? localStorage.setItem(key, "1") : localStorage.removeItem(key); 
-      } catch {} 
-    };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const YEAR = "2025";
+  const LS_PREFIX = "planoLeitura:";
 
-    // Lógica de Atualização do Visual (Progresso e Marcações)
-    const updateProgress = (mEl) => {
-      const monthId = mEl.id;
-      const links = Array.from(mEl.querySelectorAll('.refs a.link'));
-      const total = links.length;
-      const done = links.filter(a => getLocal(monthId, a.href)).length;
-      const ratio = total ? Math.round((done / total) * 100) : 0;
+  function init() {
+    const root = document.getElementById('monthsRoot');
+    const tabs = document.getElementById('monthTabs');
+
+    Object.keys(READING_PLAN).forEach(month => {
+      const btn = document.createElement('button');
+      btn.className = 'tab-btn';
+      btn.textContent = month;
+      btn.onclick = () => showMonth(month);
+      tabs.appendChild(btn);
+
+      const mesDiv = document.createElement('div');
+      mesDiv.id = month;
+      mesDiv.className = 'mes';
       
-      const fill = mEl.querySelector('.progress .fill');
-      const percent = mEl.querySelector('.progress .percent');
-      if (fill) fill.style.width = ratio + '%';
-      if (percent) percent.textContent = ratio + '%';
+      let html = `<div class="progress"><div class="bar"><div class="fill" id="fill-${month}"></div></div><div id="perc-${month}" style="font-size:12px">0%</div></div>`;
+      html += `<div class="days-grid">`;
 
-      Array.from(mEl.querySelectorAll('.day-card')).forEach(card => {
-        const linksInCard = Array.from(card.querySelectorAll('.refs a.link'));
-        const doneInCard = linksInCard.filter(a => getLocal(monthId, a.href)).length;
-        card.classList.toggle('done', linksInCard.length > 0 && doneInCard === linksInCard.length);
-      });
-      // Atualiza o estado do botão
-      mEl.querySelectorAll('.link-status').forEach(btn => {
-        const a = btn.parentElement.querySelector('a.link');
-        const checked = getLocal(monthId, a.href);
-        btn.classList.toggle('checked', checked);
-        btn.setAttribute('aria-pressed', checked ? 'true' : 'false');
-        btn.textContent = checked ? '✓' : '';
-      });
-    };
-
-    const updateGlobalProgress = () => {
-      const yearBar = document.querySelector('#yearProgress .fill');
-      const yearLabel = document.querySelector('#yearProgress .label');
-      const allLinks = Array.from(document.querySelectorAll('.mes .refs a.link'));
-      const total = allLinks.length;
-      let done = 0;
-
-      allLinks.forEach(a => {
-        const container = a.closest('.mes');
-        const monthId = container?.id;
-        if (getLocal(monthId, a.href)) done++;
+      READING_PLAN[month].forEach(day => {
+        html += `
+          <div class="day-card" data-day="${day.day}" id="card-${month}-${day.day}">
+            <strong>Dia ${day.day}</strong>
+            <div class="refs">
+              ${day.refs.map(ref => `
+                <div class="link-wrap">
+                  <button class="link-status" data-month="${month}" data-url="${ref.link}" onclick="toggleRead('${month}', '${ref.link}')"></button>
+                  <a href="${ref.link}" class="link" target="_blank">${ref.text}</a>
+                </div>
+              `).join('')}
+            </div>
+          </div>`;
       });
 
-      const ratio = total ? Math.round(done / total * 100) : 0;
-      if (yearBar) yearBar.style.width = ratio + '%';
-      if (yearLabel) yearLabel.textContent = 'Ano ' + ratio + '%';
-    };
-
-    const markTodayIfPresent = (activeMonth) => {
-      document.querySelectorAll('.today').forEach(el => el.classList.remove('today'));
-      document.querySelectorAll('.today-tag').forEach(el => el.remove());
-
-      const today = new Date();
-      const monthName = MONTHS_PT[today.getMonth()];
-      if (activeMonth.id !== monthName) return;
-
-      const dayNum = today.getDate();
-      const target = activeMonth.querySelector('.day-card[data-dia="' + dayNum + '"]');
-      
-      if (target) {
-        target.classList.add('today');
-        const tag = document.createElement('span');
-        tag.className = 'today-tag';
-        tag.textContent = 'Hoje';
-        target.appendChild(tag);
-        target.scrollIntoView({behavior:'smooth', block:'center'});
-      }
-    };
-
-    // Lógica de Renderização e Eventos de UI
-    const renderMonthContent = (planData) => {
-      const monthEl = document.createElement('div');
-      monthEl.className = 'mes';
-      monthEl.id = planData.monthId;
-      
-      // 1. Adicionar Barra de Progresso
-      const progress = document.createElement('div');
-      progress.className = 'progress';
-      progress.innerHTML = '<div class="bar"><div class="fill"></div></div><div class="percent">0%</div>';
-      monthEl.appendChild(progress);
-
-      // 2. Adicionar Grid de Dias
-      const grid = document.createElement('div');
-      grid.className = 'days-grid';
-
-      planData.days.forEach(dayData => {
-        const dayCard = document.createElement('div');
-        dayCard.className = 'day-card';
-        dayCard.setAttribute('data-dia', dayData.day);
-        
-        dayCard.innerHTML = `<strong>Dia ${dayData.day}</strong><br>`;
-        
-        const refsContainer = document.createElement('div');
-        refsContainer.className = 'refs';
-
-        dayData.refs.forEach(ref => {
-          const wrap = document.createElement('span');
-          wrap.className = 'link-wrap';
-          
-          const a = document.createElement('a');
-          a.className = 'link';
-          a.href = ref.link;
-          a.target = '_blank';
-          a.textContent = ref.text;
-
-          const btn = document.createElement('button');
-          btn.className = 'link-status';
-          btn.setAttribute('title', 'Marcar como lido');
-          btn.setAttribute('aria-label', 'Marcar como lido');
-          btn.type = 'button';
-
-          // Evento de click para marcar como lido
-          btn.addEventListener('click', async () => {
-            const checked = !getLocal(planData.monthId, a.href);
-            setLocal(planData.monthId, a.href, checked);
-            
-            // Atualiza visualmente o botão e o card
-            // O updateProgress fará isso, mas para feedback imediato...
-            btn.classList.toggle('checked', checked);
-            btn.setAttribute('aria-pressed', checked ? 'true' : 'false');
-            btn.textContent = checked ? '✓' : '';
-
-
-            // Re-calcula e atualiza o progresso do mês e anual
-            updateProgress(monthEl);
-            updateGlobalProgress();
-
-            // Sincroniza com Firebase se logado
-            const user = firebaseApp.auth.currentUser;
-            if (user && firebaseApp.cloud) {
-              try { 
-                await firebaseApp.cloud.set(user.uid, planData.monthId, a.href, checked); 
-              }
-              catch(err){ 
-                toast('Erro Firestore: '+(err && err.code || err)); 
-              }
-            }
-          });
-
-          wrap.appendChild(btn);
-          wrap.appendChild(a);
-          refsContainer.appendChild(wrap);
-        });
-
-        dayCard.appendChild(refsContainer);
-        grid.appendChild(dayCard);
-      });
-
-      monthEl.appendChild(grid);
-      document.getElementById('monthsRoot').appendChild(monthEl);
-
-      // 3. Adicionar Botão de Tab
-      const tabBtn = document.createElement('button');
-      tabBtn.className = 'tab-btn';
-      tabBtn.type = 'button';
-      tabBtn.textContent = planData.monthId;
-      tabBtn.setAttribute('data-target', planData.monthId);
-      tabBtn.addEventListener('click', () => showMonth(planData.monthId));
-      document.getElementById('monthTabs').appendChild(tabBtn);
-      
-      updateProgress(monthEl); // Atualiza o progresso inicial
-    };
-
-    const showMonth = (id) => {
-      const monthEls = document.querySelectorAll('.mes');
-      const tabBtns = document.querySelectorAll('.tab-btn');
-      
-      monthEls.forEach(m => m.classList.toggle('active', m.id === id));
-      tabBtns.forEach(b => b.classList.toggle('active', b.getAttribute('data-target') === id));
-      
-      const active = document.getElementById(id);
-      if (active) {
-        updateProgress(active);
-        markTodayIfPresent(active);
-        active.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-      localStorage.setItem(LS_PREFIX + 'lastMonth', id);
-    };
-
-    const initializePlan = () => {
-      for (const monthId in READING_PLAN) {
-        renderMonthContent({ monthId, days: READING_PLAN[monthId] });
-      }
-      
-      const today = new Date();
-      const currentMonthName = MONTHS_PT[today.getMonth()];
-      const saved = localStorage.getItem(LS_PREFIX + 'lastMonth');
-      
-      const initialMonthId = saved || currentMonthName || MONTHS_PT[0];
-      showMonth(initialMonthId);
-      updateGlobalProgress();
-    };
-
-    // Lógica do Tema
-    const initThemeToggle = () => {
-      const btnTheme = document.getElementById('toggleTheme');
-      const icon = document.getElementById('themeIcon');
-      const text = document.getElementById('themeText');
-
-      const applyTheme = (mode) => {
-        document.documentElement.classList.remove('light','dark');
-        if (mode === 'dark') document.documentElement.classList.add('dark');
-        if (mode === 'light') document.documentElement.classList.add('light');
-        localStorage.setItem(THEME_KEY, mode);
-        const isDark = mode === 'dark';
-        icon.textContent = isDark ? '☀️' : '🌙';
-        text.textContent = isDark ? 'Modo claro' : 'Modo escuro';
-        btnTheme.setAttribute('aria-pressed', isDark ? 'true' : 'false');
-      };
-      
-      // Aplica tema inicial
-      const saved = localStorage.getItem(THEME_KEY);
-      if (!saved) {
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        applyTheme(prefersDark ? 'dark' : 'light');
-      } else {
-        applyTheme(saved);
-      }
-
-      btnTheme?.addEventListener('click', () => {
-        const isDark = document.documentElement.classList.contains('dark');
-        applyTheme(isDark ? 'light' : 'dark');
-      });
-    };
-
-    // Lógica Firebase
-    const firebaseApp = {};
-
-    const iterAllLinks = () => {
-      const links = [];
-      document.querySelectorAll('.mes').forEach(mesEl => {
-        const mesId = normMonthId(mesEl.id);
-        mesEl.querySelectorAll('.refs a.link').forEach(a => {
-          links.push({ mesId, href: a.href, key: normHref(a.href) });
-        });
-      });
-      return links;
-    };
-
-    const initFirebase = async () => {
-      // A verificação estrita da chave foi removida para garantir a inicialização.
-
-      try {
-        const app = initializeApp(firebaseConfig);
-        firebaseApp.auth = getAuth(app);
-        const db = getFirestore(app);
-        enableIndexedDbPersistence(db).catch(() => {}); // Habilita persistência offline
-
-        firebaseApp.cloud = {
-          async get(uid) { 
-            const ref = doc(db, 'users', uid, 'progress', YEAR); 
-            const s = await getDoc(ref); 
-            return s.exists() ? s.data() : {}; 
-          },
-          async set(uid, mesId, hrefOrKey, checked) {
-            const m = normMonthId(mesId), k = normHref(hrefOrKey);
-            const ref = doc(db, 'users', uid, 'progress', YEAR);
-            const snap = await getDoc(ref); 
-            const cur = snap.exists() ? (snap.data() || {}) : {};
-            
-            cur[m] = cur[m] || {}; 
-            if(checked) cur[m][k] = true; 
-            else delete cur[m][k];
-            
-            await setDoc(ref, cur, { merge: true });
-          },
-          async mergeLocal(uid) {
-            // Sobe as marcações feitas localmente antes do login
-            for (const {mesId, href} of iterAllLinks()) {
-              if (getLocal(mesId, href)) {
-                await firebaseApp.cloud.set(uid, mesId, href, true);
-              }
-            }
-          },
-          apply(cache) {
-            // Aplica as marcações do Cloud ao LocalStorage
-            for (const {mesId, href, key} of iterAllLinks()) {
-              const isCheckedInCloud = !!(cache[normMonthId(mesId)] && cache[normMonthId(mesId)][key]);
-              setLocal(mesId, href, isCheckedInCloud);
-            }
-          }
-        };
-
-        const elState = document.getElementById('authState');
-        const btnIn = document.getElementById('authEnter');
-        const btnOut = document.getElementById('authExit');
-
-        btnIn.addEventListener('click', async () => {
-          try { 
-            await signInWithPopup(firebaseApp.auth, new GoogleAuthProvider()); 
-          }
-          catch(e) { 
-            const code = e && e.code || ''; 
-            if(code === 'auth/popup-blocked') toast('Popup bloqueado. Libere pop-ups para este site.'); 
-            else toast('Falha no login: ' + code); 
-          }
-        });
-        btnOut.addEventListener('click', async () => { try { await signOut(firebaseApp.auth); } catch {} });
-
-        onAuthStateChanged(firebaseApp.auth, async (user) => {
-          if (user) {
-            elState.textContent = user.displayName || user.email || 'online';
-            btnIn.style.display = 'none'; 
-            btnOut.style.display = 'inline-flex';
-            
-            try { 
-              // 1. Sincroniza marcações locais para o Cloud (Merge)
-              await firebaseApp.cloud.mergeLocal(user.uid); 
-              
-              // 2. Baixa o cache do Cloud (O estado "verdadeiro")
-              const cache = await firebaseApp.cloud.get(user.uid); 
-              
-              // 3. Aplica o cache ao LocalStorage (Cloud -> Local)
-              firebaseApp.cloud.apply(cache); 
-
-              // 4. Força a atualização do visual na tela (Corrige o problema de sincronização de tela)
-              updateGlobalProgress();
-              const activeMonth = document.querySelector('.mes.active');
-              if (activeMonth) updateProgress(activeMonth);
-              
-              toast('Sincronização completa.');
-              
-            } catch(err) { 
-              toast('Login ok, mas houve erro ao sincronizar. Tente novamente.'); 
-            }
-          } else {
-            elState.textContent = 'offline';
-            btnIn.style.display = 'inline-flex'; 
-            btnOut.style.display = 'none';
-          }
-        });
-
-      } catch (error) {
-        // Captura erros de inicialização (como chaves realmente incorretas)
-        console.error("Erro na inicialização do Firebase:", error);
-        toast("ERRO FATAL: Falha na inicialização do Firebase. Verifique suas chaves.");
-      }
-    };
-
-    // Inicialização ao carregar a página
-    document.addEventListener('DOMContentLoaded', () => {
-      initThemeToggle();
-      initializePlan();
-      initFirebase();
+      html += `</div>`;
+      mesDiv.innerHTML = html;
+      root.appendChild(mesDiv);
     });
 
-  </script>
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        document.getElementById('authState').textContent = user.displayName;
+        document.getElementById('authEnter').style.display = 'none';
+        document.getElementById('authExit').style.display = 'block';
+        await syncFromCloud(user.uid);
+      } else {
+        document.getElementById('authState').textContent = 'offline';
+        document.getElementById('authEnter').style.display = 'block';
+        document.getElementById('authExit').style.display = 'none';
+      }
+      updateUI();
+      const currentMonthIndex = new Date().getMonth();
+      const monthsOrder = Object.keys(READING_PLAN);
+      showMonth(monthsOrder[currentMonthIndex]);
+    });
+  }
+
+  window.showMonth = function(month) {
+    document.querySelectorAll('.mes').forEach(m => m.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const target = document.getElementById(month);
+    if(target) target.classList.add('active');
+    const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent === month);
+    if(btn) btn.classList.add('active');
+    
+    const today = new Date();
+    const monthsOrder = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+    if(month === monthsOrder[today.getMonth()]) {
+      const card = document.getElementById(`card-${month}-${today.getDate()}`);
+      if(card) {
+        card.classList.add('today');
+        if(!card.querySelector('.today-tag')) {
+          const tag = document.createElement('span');
+          tag.className = 'today-tag';
+          tag.textContent = 'Hoje';
+          card.appendChild(tag);
+        }
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  };
+
+  window.toggleRead = async function(month, url) {
+    const key = `${LS_PREFIX}${month}:${url}`;
+    const isRead = localStorage.getItem(key) === "true";
+    localStorage.setItem(key, !isRead);
+    updateUI();
+
+    if(auth.currentUser) {
+      const ref = doc(db, 'users', auth.currentUser.uid, 'progress', YEAR);
+      const snap = await getDoc(ref);
+      const data = snap.exists() ? snap.data() : {};
+      data[month] = data[month] || {};
+      data[month][url.replace(/\//g, '_').replace(/\./g, '-')] = !isRead;
+      await setDoc(ref, data);
+    }
+  };
+
+  function updateUI() {
+    let totalLinks = 0, totalRead = 0;
+    Object.keys(READING_PLAN).forEach(month => {
+      let mLinks = 0, mRead = 0;
+      READING_PLAN[month].forEach(day => {
+        day.refs.forEach(ref => {
+          mLinks++; totalLinks++;
+          const isRead = localStorage.getItem(`${LS_PREFIX}${month}:${ref.link}`) === "true";
+          if(isRead) { mRead++; totalRead++; }
+          const btn = document.querySelector(`button[data-month="${month}"][data-url="${ref.link}"]`);
+          if(btn) { btn.classList.toggle('checked', isRead); btn.innerHTML = isRead ? '✓' : ''; }
+        });
+      });
+      const perc = mLinks ? Math.round((mRead/mLinks)*100) : 0;
+      const fill = document.getElementById(`fill-${month}`);
+      const txt = document.getElementById(`perc-${month}`);
+      if(fill) fill.style.width = perc + '%';
+      if(txt) txt.textContent = perc + '%';
+    });
+    const yearPerc = totalLinks ? Math.round((totalRead/totalLinks)*100) : 0;
+    document.querySelector('#yearProgress .fill').style.width = yearPerc + '%';
+    document.querySelector('#yearProgress .label').textContent = `Ano ${yearPerc}%`;
+  }
+
+  async function syncFromCloud(uid) {
+    const ref = doc(db, 'users', uid, 'progress', YEAR);
+    const snap = await getDoc(ref);
+    if(snap.exists()) {
+      const data = snap.data();
+      Object.keys(data).forEach(month => {
+        Object.keys(data[month]).forEach(urlKey => {
+          const originalUrl = urlKey.replace(/_/g, '/').replace(/-/g, '.');
+          localStorage.setItem(`${LS_PREFIX}${month}:${originalUrl}`, data[month][urlKey]);
+        });
+      });
+    }
+  }
+
+  const themeBtn = document.getElementById('toggleTheme');
+  themeBtn.onclick = () => {
+    const isDark = document.documentElement.classList.toggle('dark');
+    themeBtn.textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  };
+  if(localStorage.getItem('theme') === 'dark') { document.documentElement.classList.add('dark'); themeBtn.textContent = '☀️'; }
+
+  document.getElementById('authEnter').onclick = () => signInWithPopup(auth, new GoogleAuthProvider());
+  document.getElementById('authExit').onclick = () => signOut(auth);
+
+  init();
+</script>
 </body>
 </html>
